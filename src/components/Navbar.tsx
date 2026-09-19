@@ -13,7 +13,8 @@ import {
   X,
   PlusCircle,
   RotateCcw,
-  Sparkles
+  Sparkles,
+  Gift
 } from 'lucide-react';
 import { User as UserType, City, UserRole } from '../types.ts';
 import { StorageService } from '../services/storage.ts';
@@ -32,6 +33,8 @@ interface NavbarProps {
   onOpenNewRequest: () => void;
   onOpenAIHelper: () => void;
   onResetData: () => void;
+  onOpenRegisterPro: () => void;
+  onOpenRegisterClient: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -46,7 +49,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   openOrdersCount,
   onOpenNewRequest,
   onOpenAIHelper,
-  onResetData
+  onResetData,
+  onOpenRegisterPro,
+  onOpenRegisterClient
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
@@ -179,6 +184,27 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             )}
           </div>
+        </div>
+
+        {/* Quick Register CTAs */}
+        <div className="hidden md:flex items-center gap-2">
+          <button
+            id="btn-nav-register-client-top"
+            onClick={onOpenRegisterClient}
+            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-800/90 hover:bg-teal-700 text-teal-100 hover:text-white font-semibold transition cursor-pointer text-[11px] border border-teal-600/50"
+          >
+            <User className="w-3 h-3 text-teal-300" />
+            <span>Cadastrar como Cliente (Pedir Serviços)</span>
+          </button>
+
+          <button
+            id="btn-nav-register-pro-top"
+            onClick={onOpenRegisterPro}
+            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold transition cursor-pointer text-[11px] shadow-2xs"
+          >
+            <Gift className="w-3 h-3 text-slate-950" />
+            <span>Cadastre-se como Profissional (6M Grátis)</span>
+          </button>
         </div>
 
         {/* Role Quick Switcher */}
@@ -424,6 +450,29 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </button>
 
+            {/* Quero Trabalhar CTA */}
+            <button
+              id="btn-nav-register-pro-desktop"
+              onClick={onOpenRegisterPro}
+              className="hidden xl:flex items-center gap-1.5 px-3 py-2 rounded-xl border border-amber-300 bg-amber-50 text-amber-900 text-xs font-bold hover:bg-amber-100 transition cursor-pointer shadow-2xs"
+            >
+              <Briefcase className="w-3.5 h-3.5 text-amber-700" />
+              <span>Quero Trabalhar</span>
+              <span className="bg-amber-200 text-amber-950 text-[10px] px-1.5 py-0.2 rounded font-black">
+                6M GRÁTIS
+              </span>
+            </button>
+
+            {/* Sou Cliente CTA */}
+            <button
+              id="btn-nav-register-client-desktop"
+              onClick={onOpenRegisterClient}
+              className="hidden 2xl:flex items-center gap-1.5 px-3 py-2 rounded-xl border border-teal-200 bg-teal-50 text-teal-900 text-xs font-bold hover:bg-teal-100 transition cursor-pointer shadow-2xs"
+            >
+              <User className="w-3.5 h-3.5 text-teal-700" />
+              <span>Sou Cliente</span>
+            </button>
+
             {/* Request Service CTA */}
             <button
               id="btn-nav-new-request"
@@ -452,6 +501,42 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 space-y-2 shadow-lg animate-in slide-in-from-top-2 duration-150">
+          {/* Mobile Client Register Banner */}
+          <button
+            id="btn-mobile-register-client"
+            onClick={() => {
+              onOpenRegisterClient();
+              setMobileMenuOpen(false);
+            }}
+            className="w-full flex items-center justify-between p-3 rounded-xl bg-teal-50 border border-teal-200 text-teal-900 font-bold text-xs shadow-xs cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <User className="w-4 h-4 text-teal-700" />
+              <span>Cadastre-se como Cliente (Pedir Serviços)</span>
+            </div>
+            <span className="text-[10px] bg-teal-600 text-white px-2 py-0.5 rounded-full font-bold">
+              GRÁTIS
+            </span>
+          </button>
+
+          {/* Mobile Professional Self-Register Banner */}
+          <button
+            id="btn-mobile-register-pro"
+            onClick={() => {
+              onOpenRegisterPro();
+              setMobileMenuOpen(false);
+            }}
+            className="w-full flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-300 text-slate-950 font-bold text-xs shadow-xs cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <Briefcase className="w-4 h-4 text-slate-950" />
+              <span>Cadastre-se como Prestador</span>
+            </div>
+            <span className="text-[10px] bg-slate-950 text-amber-300 px-2 py-0.5 rounded-full font-black">
+              6M GRÁTIS
+            </span>
+          </button>
+
           <button
             onClick={() => { setCurrentTab('home'); setMobileMenuOpen(false); }}
             className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50"

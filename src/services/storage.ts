@@ -20,6 +20,7 @@ import {
   INITIAL_REVIEWS,
   INITIAL_AUDIT_LOGS
 } from '../data/mockData.ts';
+import { NEIGHBORHOOD_COORDINATES } from '../utils/geolocation.ts';
 
 const STORAGE_KEYS = {
   CITIES: 'sorocaba_servicos_cities_v1',
@@ -134,6 +135,33 @@ export const StorageService = {
     return newUser;
   },
 
+  registerClient(clientData: {
+    nome: string;
+    email?: string;
+    telefone: string;
+    bairro: string;
+    cidadeId: string;
+    avatarUrl?: string;
+  }): User {
+    const clients = this.getAllClients();
+    const newUser: User = {
+      id: `cli-${Date.now()}`,
+      nome: clientData.nome.trim(),
+      email: clientData.email?.trim() || `${clientData.nome.toLowerCase().replace(/[^a-z0-9]/g, '')}@gmail.com`,
+      telefone: clientData.telefone.replace(/\D/g, ''),
+      role: 'cliente',
+      cidadeId: clientData.cidadeId,
+      bairro: clientData.bairro,
+      avatarUrl: clientData.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+      criadoEm: new Date().toISOString()
+    };
+    clients.push(newUser);
+    save(STORAGE_KEYS.CLIENTS, clients);
+    this.setActiveUser(newUser);
+    this.addAuditLog('Novo Cliente Cadastrado', newUser.nome, `Cliente cadastrado com sucesso para solicitar serviços no bairro ${newUser.bairro}.`, 'aprovacao');
+    return newUser;
+  },
+
   // Professionals
   getProfessionals(): Professional[] {
     return load<Professional[]>(STORAGE_KEYS.PROFESSIONALS, INITIAL_PROFESSIONALS);
@@ -155,28 +183,47 @@ export const StorageService = {
     servicos: string[];
     descricao: string;
     bairrosAtendidos: string[];
+    bairroBase?: string;
     whatsapp: string;
     telefone: string;
     cidadeId: string;
-  }): Professional {
+    fotoUrl?: string;
+    status?: 'ATIVO' | 'PENDENTE';
+    email?: string;
+  }): { professional: Professional; user: User } {
     const pros = this.getProfessionals();
+    const proId = `pro-${Date.now()}`;
+    const usrId = `usr-${Date.now()}`;
+
+    // Get neighborhood coords if available
+    let lat: number | undefined;
+    let lng: number | undefined;
+    const baseNeighborhood = data.bairroBase || data.bairrosAtendidos[0] || 'Centro';
+    if (NEIGHBORHOOD_COORDINATES[baseNeighborhood]) {
+      lat = NEIGHBORHOOD_COORDINATES[baseNeighborhood].lat;
+      lng = NEIGHBORHOOD_COORDINATES[baseNeighborhood].lng;
+    }
+
     const newPro: Professional = {
-      id: `pro-${Date.now()}`,
-      usuarioId: `usr-${Date.now()}`,
+      id: proId,
+      usuarioId: usrId,
       nome: data.nome,
       tituloProfissional: data.tituloProfissional,
-      fotoUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80',
+      fotoUrl: data.fotoUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80',
       categoriaId: data.categoriaId,
       servicos: data.servicos,
       descricao: data.descricao,
       cidadeId: data.cidadeId,
       bairrosAtendidos: data.bairrosAtendidos,
+      bairroBase: baseNeighborhood,
+      latitude: lat,
+      longitude: lng,
       whatsapp: data.whatsapp.replace(/\D/g, ''),
-      telefone: data.telefone,
+      telefone: data.telefone || data.whatsapp,
       horarioAtendimento: 'Segunda a Sábado, das 08:00 às 18:00',
       disponivelAgora: true,
-      verificado: false,
-      status: 'PENDENTE',
+      verificado: true,
+      status: data.status || 'ATIVO',
       notaMedia: 5.0,
       totalAvaliacoes: 0,
       portfolio: [],
@@ -193,8 +240,26 @@ export const StorageService = {
     };
     pros.push(newPro);
     save(STORAGE_KEYS.PROFESSIONALS, pros);
-    this.addAuditLog('Novo Profissional Cadastrado', data.nome, `Profissional cadastrado aguardando aprovação.`, 'aprovacao');
-    return newPro;
+
+    // Register corresponding user account
+    const newUser: User = {
+      id: usrId,
+      nome: data.nome,
+      email: data.email || `${data.nome.toLowerCase().replace(/[^a-z0-9]/g, '')}@sorocabaservicos.com.br`,
+      telefone: data.whatsapp,
+      role: 'profissional',
+      cidadeId: data.cidadeId,
+      criadoEm: new Date().toISOString()
+    };
+    const clients = this.getAllClients();
+    clients.push(newUser);
+    save(STORAGE_KEYS.CLIENTS, clients);
+
+    // Auto-set as active user
+    this.setActiveUser(newUser);
+
+    this.addAuditLog('Novo Profissional Cadastrado', data.nome, `Profissional cadastrado com 6 meses de degustação gratuita.`, 'aprovacao');
+    return { professional: newPro, user: newUser };
   },
 
   toggleProfessionalAvailability(proId: string): boolean {

@@ -54,6 +54,8 @@ import { HowItWorksView } from './components/HowItWorksView.tsx';
 import { Footer } from './components/Footer.tsx';
 import { OfflineIndicator } from './components/OfflineIndicator.tsx';
 import { GeolocationDistanceFilter } from './components/GeolocationDistanceFilter.tsx';
+import { ProfessionalRegisterModal } from './components/ProfessionalRegisterModal.tsx';
+import { ClientRegisterModal } from './components/ClientRegisterModal.tsx';
 import {
   calculateDistanceKm,
   getProfessionalCoordinates
@@ -121,10 +123,21 @@ export default function App() {
     targetType: 'profissional'
   });
 
+  const [isRegisterProModalOpen, setIsRegisterProModalOpen] = useState(false);
+  const [isRegisterClientModalOpen, setIsRegisterClientModalOpen] = useState(false);
+
   // Selected city object
   const selectedCity = useMemo(() => {
     return cities.find(c => c.id === selectedCityId) || cities[0];
   }, [cities, selectedCityId]);
+
+  // Current active professional if the logged-in user is a pro
+  const activeProfessional = useMemo(() => {
+    return (
+      professionals.find(p => p.usuarioId === activeUser.id || p.id === activeUser.id) ||
+      professionals[0]
+    );
+  }, [professionals, activeUser]);
 
   // Refresh all state from localStorage
   const refreshAllState = () => {
@@ -369,6 +382,8 @@ export default function App() {
           setIsAIHelperOpen(true);
         }}
         onResetData={handleResetData}
+        onOpenRegisterPro={() => setIsRegisterProModalOpen(true)}
+        onOpenRegisterClient={() => setIsRegisterClientModalOpen(true)}
       />
 
       {/* Main Dynamic Content Area */}
@@ -399,6 +414,8 @@ export default function App() {
                   sortByProximity: true
                 });
               }}
+              onOpenRegisterPro={() => setIsRegisterProModalOpen(true)}
+              onOpenRegisterClient={() => setIsRegisterClientModalOpen(true)}
             />
 
             {/* Popular Categories Grid */}
@@ -507,24 +524,11 @@ export default function App() {
 
                 <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
                   <button
-                    onClick={() => {
-                      const newPro = StorageService.registerProfessional({
-                        nome: 'Novo Profissional Sorocaba',
-                        tituloProfissional: 'Técnico Especialista Residencial',
-                        categoriaId: 'cat-eletrica',
-                        servicos: ['Instalações em Geral', 'Manutenção Preventiva'],
-                        descricao: 'Atendimento pontual em Sorocaba com ferramentas completas.',
-                        bairrosAtendidos: ['Campolim', 'Centro', 'Trujillo'],
-                        whatsapp: '15998877665',
-                        telefone: '(15) 3232-0000',
-                        cidadeId: selectedCityId
-                      });
-                      refreshAllState();
-                      setCurrentTab('painel_profissional');
-                    }}
+                    id="btn-home-promo-register-pro"
+                    onClick={() => setIsRegisterProModalOpen(true)}
                     className="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm transition text-center cursor-pointer shadow-md"
                   >
-                    Cadastrar como Profissional
+                    Cadastrar como Profissional (6M Grátis)
                   </button>
 
                   <button
@@ -856,6 +860,8 @@ export default function App() {
             }}
             onGoToPros={() => setCurrentTab('profissionais')}
             onGoToBizs={() => setCurrentTab('empresas')}
+            onOpenRegisterPro={() => setIsRegisterProModalOpen(true)}
+            onOpenRegisterClient={() => setIsRegisterClientModalOpen(true)}
           />
         )}
 
@@ -893,7 +899,7 @@ export default function App() {
         {/* VIEW: PROFESSIONAL DASHBOARD */}
         {currentTab === 'painel_profissional' && (
           <ProfessionalDashboardView
-            professional={professionals[0] || {} as any}
+            professional={activeProfessional || professionals[0] || ({} as any)}
             categories={categories}
             requests={requests}
             onRefresh={refreshAllState}
@@ -903,7 +909,7 @@ export default function App() {
         {/* VIEW: BUSINESS DASHBOARD */}
         {currentTab === 'painel_empresa' && (
           <BusinessDashboardView
-            business={businesses[0] || {} as any}
+            business={businesses[0] || ({} as any)}
             categories={categories}
             onRefresh={refreshAllState}
           />
@@ -936,12 +942,54 @@ export default function App() {
           setRequestModalDefaults({});
           setIsRequestModalOpen(true);
         }}
+        onOpenRegisterPro={() => setIsRegisterProModalOpen(true)}
+        onOpenRegisterClient={() => setIsRegisterClientModalOpen(true)}
       />
 
       {/* Offline Banner Indicator */}
       <OfflineIndicator />
 
       {/* MODALS */}
+      {/* Self-Registration Modal for Clients */}
+      <ClientRegisterModal
+        isOpen={isRegisterClientModalOpen}
+        onClose={() => setIsRegisterClientModalOpen(false)}
+        selectedCity={selectedCity}
+        onSwitchToProfessional={() => {
+          setIsRegisterClientModalOpen(false);
+          setIsRegisterProModalOpen(true);
+        }}
+        onSuccess={(newUser, proceedToRequest) => {
+          refreshAllState();
+          setActiveUser(newUser);
+          setIsRegisterClientModalOpen(false);
+          if (proceedToRequest) {
+            setTargetProForRequest(null);
+            setRequestModalDefaults({});
+            setIsRequestModalOpen(true);
+          } else {
+            setCurrentTab('profissionais');
+          }
+        }}
+      />
+
+      {/* Self-Registration Modal for Professionals */}
+      <ProfessionalRegisterModal
+        isOpen={isRegisterProModalOpen}
+        onClose={() => setIsRegisterProModalOpen(false)}
+        categories={categories}
+        selectedCity={selectedCity}
+        onSwitchToClient={() => {
+          setIsRegisterProModalOpen(false);
+          setIsRegisterClientModalOpen(true);
+        }}
+        onSuccess={(newPro, newUser) => {
+          refreshAllState();
+          setActiveUser(newUser);
+          setCurrentTab('painel_profissional');
+          setSelectedProForModal(newPro);
+        }}
+      />
       {/* Professional Profile Modal */}
       {selectedProForModal && (
         <ProfessionalProfileModal

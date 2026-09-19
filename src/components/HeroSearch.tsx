@@ -11,6 +11,8 @@ interface HeroSearchProps {
   onQuickAIQuery: (text: string) => void;
   onOpenNewRequest: () => void;
   onOpenNearMe?: () => void;
+  onOpenRegisterPro?: () => void;
+  onOpenRegisterClient?: () => void;
 }
 
 export const HeroSearch: React.FC<HeroSearchProps> = ({
@@ -20,7 +22,9 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
   onSelectCategory,
   onQuickAIQuery,
   onOpenNewRequest,
-  onOpenNearMe
+  onOpenNearMe,
+  onOpenRegisterPro,
+  onOpenRegisterClient
 }) => {
   const [query, setQuery] = useState('');
 
@@ -139,6 +143,44 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             <Shield className="w-4 h-4 text-amber-300" />
             <span>100% Gratuito para Clientes</span>
           </div>
+        </div>
+
+        {/* Quick Registration CTA Banners for Clients and Professionals */}
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5">
+          {onOpenRegisterClient && (
+            <button
+              id="btn-hero-register-client"
+              type="button"
+              onClick={onOpenRegisterClient}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-500/20 hover:bg-teal-500/30 border border-teal-300/40 text-teal-100 hover:text-white text-xs font-semibold transition cursor-pointer shadow-xs group"
+            >
+              <span>
+                Quer passar um serviço?{' '}
+                <strong className="underline decoration-teal-300/60 underline-offset-2 text-white">
+                  Cadastre-se como Cliente
+                </strong>
+              </span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform text-teal-200" />
+            </button>
+          )}
+
+          {onOpenRegisterPro && (
+            <button
+              id="btn-hero-register-pro"
+              type="button"
+              onClick={onOpenRegisterPro}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 hover:bg-amber-400/30 border border-amber-300/40 text-amber-200 hover:text-amber-100 text-xs font-semibold transition cursor-pointer shadow-xs group"
+            >
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              <span>
+                É prestador em {selectedCity.nome}?{' '}
+                <strong className="underline decoration-amber-400/60 underline-offset-2">
+                  Cadastre-se (6M Grátis)
+                </strong>
+              </span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform text-amber-300" />
+            </button>
+          )}
         </div>
       </div>
     </section>

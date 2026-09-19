@@ -16,7 +16,9 @@ export const HowItWorksView: React.FC<{
   onOpenNewRequest: () => void;
   onGoToPros: () => void;
   onGoToBizs: () => void;
-}> = ({ onOpenNewRequest, onGoToPros, onGoToBizs }) => {
+  onOpenRegisterPro?: () => void;
+  onOpenRegisterClient?: () => void;
+}> = ({ onOpenNewRequest, onGoToPros, onGoToBizs, onOpenRegisterPro, onOpenRegisterClient }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
       {/* Hero Intro */}
@@ -77,14 +79,25 @@ export const HowItWorksView: React.FC<{
           </div>
         </div>
 
-        <div className="mt-6 text-center">
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
           <button
+            id="btn-howitworks-new-request"
             onClick={onOpenNewRequest}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold shadow-md shadow-teal-600/20 transition cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold shadow-md shadow-teal-600/20 transition cursor-pointer"
           >
             <span>Pedir um Serviço Agora</span>
             <ArrowRight className="w-4 h-4" />
           </button>
+
+          {onOpenRegisterClient && (
+            <button
+              id="btn-howitworks-register-client"
+              onClick={onOpenRegisterClient}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 text-sm font-bold transition cursor-pointer"
+            >
+              <span>Cadastrar como Cliente (Passar Serviços)</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -132,13 +145,21 @@ export const HowItWorksView: React.FC<{
           </div>
         </div>
 
-        <div className="mt-6 text-center">
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+          {onOpenRegisterPro && (
+            <button
+              onClick={onOpenRegisterPro}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-sm font-black shadow-md transition cursor-pointer"
+            >
+              <span>Cadastrar Meu Perfil Grátis (6 Meses)</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          )}
           <button
             onClick={onGoToPros}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-sm font-bold shadow-md transition cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-semibold border border-white/20 transition cursor-pointer"
           >
             <span>Ver Profissionais Cadastrados</span>
-            <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>

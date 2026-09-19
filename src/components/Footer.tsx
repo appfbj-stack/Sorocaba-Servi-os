@@ -6,12 +6,16 @@ interface FooterProps {
   selectedCity: City;
   onSelectCategory: (slug: string) => void;
   onOpenNewRequest: () => void;
+  onOpenRegisterPro?: () => void;
+  onOpenRegisterClient?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   selectedCity,
   onSelectCategory,
-  onOpenNewRequest
+  onOpenNewRequest,
+  onOpenRegisterPro,
+  onOpenRegisterClient
 }) => {
   return (
     <footer className="bg-slate-900 text-slate-400 text-xs border-t border-slate-800 pt-12 pb-8 px-4 sm:px-6 lg:px-8">
@@ -100,6 +104,27 @@ export const Footer: React.FC<FooterProps> = ({
           <p className="text-[11px] text-amber-300/80">
             ★ Primeiros profissionais contam com 6 meses de gratuidade completa.
           </p>
+          <div className="space-y-2 pt-1">
+            {onOpenRegisterClient && (
+              <button
+                id="btn-footer-register-client"
+                onClick={onOpenRegisterClient}
+                className="w-full py-2 px-3 rounded-xl bg-teal-600/20 hover:bg-teal-600/30 border border-teal-500/40 text-teal-300 text-xs font-bold transition cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <span>Cadastrar-se como Cliente (Pedir Serviços)</span>
+              </button>
+            )}
+
+            {onOpenRegisterPro && (
+              <button
+                id="btn-footer-register-pro"
+                onClick={onOpenRegisterPro}
+                className="w-full py-2 px-3 rounded-xl bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 text-amber-300 text-xs font-bold transition cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <span>Cadastrar-se como Profissional (6M Grátis)</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
