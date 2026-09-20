@@ -97,15 +97,58 @@ export const PWAInstallButton: React.FC<{ compact?: boolean }> = ({ compact = fa
     );
   }
 
+  const [showGenericGuide, setShowGenericGuide] = useState(false);
+
   return (
-    <button
-      id="btn-pwa-install-fallback"
-      onClick={() => alert("Para instalar no seu navegador ou celular, toque no menu de opções (três pontinhos) e clique em 'Instalar aplicativo' ou 'Adicionar à tela inicial'.")}
-      className="hidden md:flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 transition cursor-pointer"
-      title="Disponível como PWA instalável"
-    >
-      <Smartphone className="w-3.5 h-3.5 text-slate-500" />
-      <span>App Instalável</span>
-    </button>
+    <>
+      <button
+        id="btn-pwa-install-fallback"
+        onClick={() => setShowGenericGuide(true)}
+        className={compact
+          ? "flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-teal-200 bg-teal-50 text-teal-800 hover:bg-teal-100 transition cursor-pointer"
+          : "flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-lg border border-teal-200 bg-teal-50 text-teal-800 hover:bg-teal-100 transition cursor-pointer"
+        }
+        title="Instalar Sorocaba Serviços no seu celular ou computador"
+      >
+        <Smartphone className="w-3.5 h-3.5 text-teal-600" />
+        <span>Instalar Aplicativo</span>
+      </button>
+
+      {showGenericGuide && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl border border-slate-100">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-xl bg-teal-100 text-teal-700">
+                  <Download className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900">Instalar Aplicativo</h3>
+              </div>
+              <button
+                onClick={() => setShowGenericGuide(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="text-xs sm:text-sm text-slate-600 space-y-3 mb-5 leading-relaxed">
+              <p>
+                O <strong>Sorocaba Serviços</strong> é um Progressive Web App (PWA) e pode ser instalado diretamente no seu celular ou computador sem ocupar espaço da loja:
+              </p>
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                <p><strong>• No Chrome / Edge (Desktop/Android):</strong> Clique no ícone de instalação <Download className="w-3.5 h-3.5 inline text-teal-600" /> na barra de endereços ou no menu (três pontos) &gt; <em>"Instalar aplicativo"</em>.</p>
+                <p><strong>• No Safari (iPhone/iPad):</strong> Toque em <em>Compartilhar</em> e selecione <em>"Adicionar à Tela de Início"</em>.</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowGenericGuide(false)}
+              className="w-full rounded-xl bg-teal-600 py-2.5 text-sm font-semibold text-white hover:bg-teal-700 transition cursor-pointer"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };

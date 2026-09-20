@@ -4,11 +4,13 @@ import {
   User,
   Professional,
   Business,
+  BusinessStatus,
   ServiceRequest,
   ServiceProposal,
   Review,
   AuditLog,
-  SmartClassificationResult
+  SmartClassificationResult,
+  PixRechargeTransaction
 } from '../types.ts';
 import {
   INITIAL_CITIES,
@@ -33,7 +35,8 @@ const STORAGE_KEYS = {
   AUDIT_LOGS: 'sorocaba_servicos_audit_v1',
   FAVORITES: 'sorocaba_servicos_favorites_v1',
   ACTIVE_USER: 'sorocaba_servicos_active_user_v1',
-  SELECTED_CITY_ID: 'sorocaba_servicos_selected_city_id_v1'
+  SELECTED_CITY_ID: 'sorocaba_servicos_selected_city_id_v1',
+  PIX_TRANSACTIONS: 'sorocaba_servicos_pix_transactions_v1'
 };
 
 function load<T>(key: string, fallback: T): T {
@@ -103,7 +106,19 @@ export const StorageService = {
 
   // Categories
   getCategories(): ServiceCategory[] {
-    return load<ServiceCategory[]>(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
+    const loaded = load<ServiceCategory[]>(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
+    const existingIds = new Set(loaded.map(c => c.id));
+    let changed = false;
+    for (const initCat of INITIAL_CATEGORIES) {
+      if (!existingIds.has(initCat.id)) {
+        loaded.push(initCat);
+        changed = true;
+      }
+    }
+    if (changed) {
+      save(STORAGE_KEYS.CATEGORIES, loaded);
+    }
+    return loaded;
   },
 
   // Active User / Auth
@@ -164,7 +179,30 @@ export const StorageService = {
 
   // Professionals
   getProfessionals(): Professional[] {
-    return load<Professional[]>(STORAGE_KEYS.PROFESSIONALS, INITIAL_PROFESSIONALS);
+    const loaded = load<Professional[]>(STORAGE_KEYS.PROFESSIONALS, INITIAL_PROFESSIONALS);
+    const existingIds = new Set(loaded.map(p => p.id));
+    let changed = false;
+    for (const initPro of INITIAL_PROFESSIONALS) {
+      if (!existingIds.has(initPro.id)) {
+        loaded.push(initPro);
+        changed = true;
+      }
+    }
+    // Ensure all professionals have opportunities and unlocked tracking
+    for (const pro of loaded) {
+      if (typeof pro.oportunidadesDisponiveis !== 'number') {
+        pro.oportunidadesDisponiveis = 10;
+        changed = true;
+      }
+      if (!Array.isArray(pro.pedidosDesbloqueadosIds)) {
+        pro.pedidosDesbloqueadosIds = [];
+        changed = true;
+      }
+    }
+    if (changed) {
+      save(STORAGE_KEYS.PROFESSIONALS, loaded);
+    }
+    return loaded;
   },
 
   getProfessionalById(id: string): Professional | undefined {
@@ -227,11 +265,12 @@ export const StorageService = {
       notaMedia: 5.0,
       totalAvaliacoes: 0,
       portfolio: [],
+      oportunidadesDisponiveis: 10,
+      pedidosDesbloqueadosIds: [],
       plano: {
-        tipo: 'gratuito_6_meses',
-        nome: 'Degustação 6 Meses Grátis',
+        tipo: 'pacote_10_creditos',
+        nome: 'Pacote 10 Oportunidades PIX',
         dataInicio: new Date().toISOString(),
-        dataTermino: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
         status: 'ativo',
         limiteOrcamentosPorMes: 999,
         origemCadastro: 'organico'
@@ -258,8 +297,114 @@ export const StorageService = {
     // Auto-set as active user
     this.setActiveUser(newUser);
 
-    this.addAuditLog('Novo Profissional Cadastrado', data.nome, `Profissional cadastrado com 6 meses de degustação gratuita.`, 'aprovacao');
+    this.addAuditLog('Novo Profissional Cadastrado', data.nome, `Profissional cadastrado no modelo de 10 oportunidades liberadas por R$ 9,99 via PIX.`, 'aprovacao');
     return { professional: newPro, user: newUser };
+  },
+
+  addProfessionalCredits(
+    proId: string,
+    oportunidades: number = 10,
+    valor: number = 9.99,
+    chavePix: string = '02598018796'
+  ): Professional {
+    const pros = this.getProfessionals();
+    let updatedPro: Professional | undefined;
+
+    const updatedList = pros.map(p => {
+      if (p.id === proId) {
+        const currentBalance = typeof p.oportunidadesDisponiveis === 'number' ? p.oportunidadesDisponiveis : 0;
+        const newBalance = currentBalance + oportunidades;
+        updatedPro = {
+          ...p,
+          oportunidadesDisponiveis: newBalance,
+          plano: {
+            ...p.plano,
+            tipo: 'pacote_10_creditos',
+            nome: 'Pacote 10 Oportunidades PIX',
+            status: 'ativo'
+          }
+        };
+        return updatedPro;
+      }
+      return p;
+    });
+
+    save(STORAGE_KEYS.PROFESSIONALS, updatedList);
+
+    // Save Pix transaction record
+    const txs = load<PixRechargeTransaction[]>(STORAGE_KEYS.PIX_TRANSACTIONS, []);
+    const newTx: PixRechargeTransaction = {
+      id: `pix-${Date.now()}`,
+      profissionalId: proId,
+      profissionalNome: updatedPro?.nome || 'Profissional',
+      valor,
+      oportunidadesLiberadas: oportunidades,
+      chavePix,
+      status: 'concluido',
+      dataHora: new Date().toISOString()
+    };
+    txs.unshift(newTx);
+    save(STORAGE_KEYS.PIX_TRANSACTIONS, txs);
+
+    this.addAuditLog(
+      'Recarga PIX Liberada',
+      updatedPro?.nome || 'Profissional',
+      `Liberadas ${oportunidades} oportunidades por R$ ${valor.toFixed(2)} via PIX (CPF ${chavePix}).`,
+      'aprovacao'
+    );
+
+    return updatedPro || pros[0];
+  },
+
+  unlockServiceRequestForPro(proId: string, requestId: string): Professional {
+    const pros = this.getProfessionals();
+    let updatedPro: Professional | undefined;
+
+    const updatedList = pros.map(p => {
+      if (p.id === proId) {
+        const unlocked = p.pedidosDesbloqueadosIds || [];
+        if (!unlocked.includes(requestId)) {
+          const currentBalance = typeof p.oportunidadesDisponiveis === 'number' ? p.oportunidadesDisponiveis : 0;
+          const newBalance = Math.max(0, currentBalance - 1);
+          updatedPro = {
+            ...p,
+            oportunidadesDisponiveis: newBalance,
+            pedidosDesbloqueadosIds: [...unlocked, requestId]
+          };
+          return updatedPro;
+        } else {
+          updatedPro = p;
+        }
+      }
+      return p;
+    });
+
+    if (updatedPro) {
+      save(STORAGE_KEYS.PROFESSIONALS, updatedList);
+      this.addAuditLog(
+        'Oportunidade Desbloqueada',
+        updatedPro.nome,
+        `Desbloqueou pedido #${requestId}. Saldo restante: ${updatedPro.oportunidadesDisponiveis || 0} oportunidades.`,
+        'pedido'
+      );
+    }
+
+    return updatedPro || pros[0];
+  },
+
+  getPixTransactions(): PixRechargeTransaction[] {
+    return load<PixRechargeTransaction[]>(STORAGE_KEYS.PIX_TRANSACTIONS, [
+      {
+        id: 'pix-demo-1',
+        profissionalId: 'pro-1',
+        profissionalNome: 'Carlos Eduardo Oliveira',
+        valor: 9.99,
+        oportunidadesLiberadas: 10,
+        chavePix: '02598018796',
+        status: 'concluido',
+        dataHora: new Date(Date.now() - 3600000).toISOString()
+      }
+    ]);
   },
 
   toggleProfessionalAvailability(proId: string): boolean {
@@ -285,7 +430,7 @@ export const StorageService = {
   extendProfessionalTrial(proId: string, extraDays: number = 180): void {
     const pros = this.getProfessionals().map(p => {
       if (p.id === proId) {
-        const currEnd = new Date(p.plano.dataTermino).getTime();
+        const currEnd = new Date(p.plano.dataTermino || Date.now()).getTime();
         const newEnd = new Date(currEnd + extraDays * 24 * 60 * 60 * 1000).toISOString();
         return {
           ...p,
@@ -304,7 +449,19 @@ export const StorageService = {
 
   // Businesses
   getBusinesses(): Business[] {
-    return load<Business[]>(STORAGE_KEYS.BUSINESSES, INITIAL_BUSINESSES);
+    const loaded = load<Business[]>(STORAGE_KEYS.BUSINESSES, INITIAL_BUSINESSES);
+    const existingIds = new Set(loaded.map(b => b.id));
+    let changed = false;
+    for (const initBiz of INITIAL_BUSINESSES) {
+      if (!existingIds.has(initBiz.id)) {
+        loaded.push(initBiz);
+        changed = true;
+      }
+    }
+    if (changed) {
+      save(STORAGE_KEYS.BUSINESSES, loaded);
+    }
+    return loaded;
   },
 
   getBusinessById(id: string): Business | undefined {
@@ -321,16 +478,23 @@ export const StorageService = {
     whatsapp: string;
     descricao: string;
     servicosOuProdutos: string[];
+    fotos?: string[];
+    logoUrl?: string;
+    horarioAtendimento?: string;
+    patrocinada?: boolean;
+    anuncioAtivo?: boolean;
+    status?: BusinessStatus;
+    site?: string;
+    instagram?: string;
   }): Business {
     const list = this.getBusinesses();
+    const defaultFoto = 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&auto=format&fit=crop&q=80';
     const newBiz: Business = {
       id: `emp-${Date.now()}`,
       usuarioId: `usr-biz-${Date.now()}`,
       nome: data.nome,
-      logoUrl: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=150&auto=format&fit=crop&q=80',
-      fotos: [
-        'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&auto=format&fit=crop&q=80'
-      ],
+      logoUrl: data.logoUrl || (data.fotos && data.fotos[0]) || 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=150&auto=format&fit=crop&q=80',
+      fotos: data.fotos && data.fotos.length > 0 ? data.fotos : [defaultFoto],
       descricao: data.descricao,
       categoriaId: data.categoriaId,
       cidadeId: data.cidadeId,
@@ -338,24 +502,26 @@ export const StorageService = {
       endereco: data.endereco,
       telefone: data.telefone,
       whatsapp: data.whatsapp.replace(/\D/g, ''),
-      horarioAtendimento: 'Segunda a Sexta: 08:00 às 18:00',
+      horarioAtendimento: data.horarioAtendimento || 'Segunda a Sexta: 08:00 às 18:00',
       servicosOuProdutos: data.servicosOuProdutos,
-      patrocinada: false,
-      anuncioAtivo: false,
-      status: 'PENDENTE',
+      site: data.site,
+      instagram: data.instagram,
+      patrocinada: data.patrocinada ?? false,
+      anuncioAtivo: data.anuncioAtivo ?? true,
+      status: data.status ?? 'ATIVO',
       notaMedia: 5.0,
-      totalAvaliacoes: 0,
+      totalAvaliacoes: 1,
       analytics: {
-        visualizacoes: 0,
+        visualizacoes: 1,
         cliquesWhatsapp: 0,
         cliquesComoChegar: 0,
         cliquesSiteOuInsta: 0
       },
       criadoEm: new Date().toISOString()
     };
-    list.push(newBiz);
+    list.unshift(newBiz);
     save(STORAGE_KEYS.BUSINESSES, list);
-    this.addAuditLog('Nova Empresa Cadastrada', data.nome, `Empresa cadastrada aguardando aprovação.`, 'aprovacao');
+    this.addAuditLog('Nova Empresa Cadastrada', data.nome, `Empresa cadastrada e plano ativado via PIX no bairro ${data.bairro}.`, 'aprovacao');
     return newBiz;
   },
 
@@ -407,7 +573,19 @@ export const StorageService = {
 
   // Service Requests
   getServiceRequests(): ServiceRequest[] {
-    return load<ServiceRequest[]>(STORAGE_KEYS.REQUESTS, INITIAL_REQUESTS);
+    const loaded = load<ServiceRequest[]>(STORAGE_KEYS.REQUESTS, INITIAL_REQUESTS);
+    const existingIds = new Set(loaded.map(r => r.id));
+    let changed = false;
+    for (const initReq of INITIAL_REQUESTS) {
+      if (!existingIds.has(initReq.id)) {
+        loaded.push(initReq);
+        changed = true;
+      }
+    }
+    if (changed) {
+      save(STORAGE_KEYS.REQUESTS, loaded);
+    }
+    return loaded;
   },
 
   createServiceRequest(request: {
@@ -700,6 +878,116 @@ export const StorageService = {
         perguntasComplementares: [
           'Qual a marca, modelo e ano do veículo?',
           'O carro está estacionado em garagem ou em via pública?'
+        ]
+      };
+    }
+
+    // Check esquadrias de alumínio & blindex
+    if (
+      lower.includes('esquadria') ||
+      lower.includes('esquadrias') ||
+      lower.includes('aluminio') ||
+      lower.includes('alumínio') ||
+      lower.includes('blindex') ||
+      lower.includes('box') ||
+      lower.includes('vidro') ||
+      lower.includes('vidraceiro') ||
+      lower.includes('vidraçaria') ||
+      lower.includes('sacada') ||
+      lower.includes('guarda-corpo') ||
+      lower.includes('roldana')
+    ) {
+      return {
+        categoriaId: 'cat-esquadrias-blindex',
+        categoriaNome: 'Esquadrias de Alumínio & Blindex',
+        servicoSugerido: lower.includes('box')
+          ? 'Instalação ou Manutenção de Box Blindex'
+          : lower.includes('sacada')
+          ? 'Fechamento de Sacada em Vidro Temperado'
+          : lower.includes('roldana')
+          ? 'Troca de Roldanas e Manutenção de Janela/Porta de Alumínio'
+          : 'Instalação de Esquadrias de Alumínio Sob Medida',
+        urgencia: lower.includes('quebrado') || lower.includes('caiu') || lower.includes('emperrada') ? 'urgente' : 'normal',
+        confianca: 0.96,
+        motivo: 'Detectamos termos ligados a vidros temperados (blindex) e esquadrias de alumínio.',
+        perguntasComplementares: [
+          'Você já possui as medidas aproximadas do vão (largura x altura)?',
+          'Qual a cor do perfil de alumínio desejada (preto, branco, fosco ou bronze)?',
+          'Trata-se de nova instalação ou reparo em peça existente?'
+        ]
+      };
+    }
+
+    // Check ajudantes / carga / descarga / panfletagem / entregas
+    if (
+      lower.includes('ajudante') ||
+      lower.includes('ajudar') ||
+      lower.includes('descarregar') ||
+      lower.includes('descarregamento') ||
+      lower.includes('caminhao') ||
+      lower.includes('caminhão') ||
+      lower.includes('panflet') ||
+      lower.includes('eleiç') ||
+      lower.includes('eleic') ||
+      lower.includes('entrega') ||
+      lower.includes('carga') ||
+      lower.includes('descarga') ||
+      lower.includes('carregamento') ||
+      lower.includes('palete') ||
+      lower.includes('fardo')
+    ) {
+      return {
+        categoriaId: 'cat-ajudantes',
+        categoriaNome: 'Ajudantes, Carga & Diárias',
+        servicoSugerido: lower.includes('caminhao') || lower.includes('caminhão') || lower.includes('descarregar')
+          ? 'Ajudante para Descarregar Caminhão'
+          : lower.includes('panflet') || lower.includes('elei')
+          ? 'Panfletagem (Eleições, Comércio e Eventos)'
+          : lower.includes('entrega')
+          ? 'Auxiliar de Entregas Rápidas e Logística'
+          : 'Diária de Ajudante de Serviços Gerais',
+        urgencia: lower.includes('urgente') || lower.includes('hoje') || lower.includes('amanhã') ? 'urgente' : 'normal',
+        confianca: 0.95,
+        motivo: 'Detectamos termos ligados a serviços operacionais, ajudantes, carga/descarga e panfletagem.',
+        perguntasComplementares: [
+          'Quantas pessoas/ajudantes são necessários para o serviço?',
+          'Qual o horário previsto de início e a duração estimada?',
+          'Qual o local exato (bairro ou ponto de referência em Sorocaba)?'
+        ]
+      };
+    }
+
+    // Check pedreiro & alvenaria
+    if (
+      lower.includes('pedreiro') ||
+      lower.includes('alvenaria') ||
+      lower.includes('muro') ||
+      lower.includes('reboco') ||
+      lower.includes('chapisco') ||
+      lower.includes('contrapiso') ||
+      lower.includes('tijolo') ||
+      lower.includes('bloco de concreto') ||
+      lower.includes('alicerce') ||
+      lower.includes('baldrame') ||
+      lower.includes('massa de cimento')
+    ) {
+      return {
+        categoriaId: 'cat-pedreiro',
+        categoriaNome: 'Pedreiros & Alvenaria',
+        servicoSugerido: lower.includes('muro')
+          ? 'Construção de Muros e Alvenaria'
+          : lower.includes('reboco') || lower.includes('chapisco')
+          ? 'Reboco, Chapisco e Emboço'
+          : lower.includes('contrapiso')
+          ? 'Contrapiso e Regularização de Piso'
+          : 'Pedreiro de Obras e Reformas',
+        urgencia: lower.includes('urgente') || lower.includes('caindo') ? 'urgente' : 'normal',
+        confianca: 0.96,
+        motivo: 'Identificamos termos específicos de alvenaria e construção civil pesada.',
+        perguntasComplementares: [
+          'Você já tem os materiais no local (cimento, areia, blocos)?',
+          'Qual a metragem aproximada da obra ou reforma?',
+          'O serviço será negociado por diária ou por empreitada fechada?'
         ]
       };
     }

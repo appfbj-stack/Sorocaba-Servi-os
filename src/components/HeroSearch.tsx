@@ -36,9 +36,10 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
   };
 
   const samplePrompts = [
-    'Minha tomada está esquentando e quero trocar',
+    'Ajudante para descarregar caminhão ou diária',
+    'Pedreiro para construir muro e reboco',
+    'Instalador de box blindex e esquadrias de alumínio',
     'Preciso de uma diarista amanhã no Campolim',
-    'Chuveiro queimou preciso de conserto urgente',
     'Montador para guarda-roupas casal 6 portas'
   ];
 
@@ -175,7 +176,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
               <span>
                 É prestador em {selectedCity.nome}?{' '}
                 <strong className="underline decoration-amber-400/60 underline-offset-2">
-                  Cadastre-se (6M Grátis)
+                  Cadastre-se (10 Oportunidades)
                 </strong>
               </span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform text-amber-300" />

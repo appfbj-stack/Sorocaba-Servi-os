@@ -19,7 +19,13 @@ import {
   Star,
   Phone,
   MessageCircle,
-  HelpCircle
+  HelpCircle,
+  AppWindow,
+  Layers,
+  Boxes,
+  Users,
+  HardHat,
+  PackageCheck
 } from 'lucide-react';
 
 interface CategoryIconProps {
@@ -43,6 +49,13 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({ name, className = "w
       return <Wind className={className} />;
     case 'Hammer':
       return <Hammer className={className} />;
+    case 'HardHat':
+      return <HardHat className={className} />;
+    case 'Boxes':
+    case 'PackageCheck':
+      return <Boxes className={className} />;
+    case 'Users':
+      return <Users className={className} />;
     case 'Car':
       return <Car className={className} />;
     case 'HeartHandshake':
@@ -55,6 +68,9 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({ name, className = "w
       return <Truck className={className} />;
     case 'Building2':
       return <Building2 className={className} />;
+    case 'AppWindow':
+    case 'Layers':
+      return <AppWindow className={className} />;
     default:
       return <Wrench className={className} />;
   }

@@ -17,7 +17,8 @@ import {
   MessageCircle,
   Building2,
   Users,
-  Navigation
+  Navigation,
+  Store
 } from 'lucide-react';
 import {
   City,
@@ -56,6 +57,8 @@ import { OfflineIndicator } from './components/OfflineIndicator.tsx';
 import { GeolocationDistanceFilter } from './components/GeolocationDistanceFilter.tsx';
 import { ProfessionalRegisterModal } from './components/ProfessionalRegisterModal.tsx';
 import { ClientRegisterModal } from './components/ClientRegisterModal.tsx';
+import { BusinessCarousel } from './components/BusinessCarousel.tsx';
+import { BusinessRegisterModal } from './components/BusinessRegisterModal.tsx';
 import {
   calculateDistanceKm,
   getProfessionalCoordinates
@@ -125,6 +128,7 @@ export default function App() {
 
   const [isRegisterProModalOpen, setIsRegisterProModalOpen] = useState(false);
   const [isRegisterClientModalOpen, setIsRegisterClientModalOpen] = useState(false);
+  const [isBusinessRegisterModalOpen, setIsBusinessRegisterModalOpen] = useState(false);
 
   // Selected city object
   const selectedCity = useMemo(() => {
@@ -384,6 +388,7 @@ export default function App() {
         onResetData={handleResetData}
         onOpenRegisterPro={() => setIsRegisterProModalOpen(true)}
         onOpenRegisterClient={() => setIsRegisterClientModalOpen(true)}
+        onOpenRegisterBusiness={() => setIsBusinessRegisterModalOpen(true)}
       />
 
       {/* Main Dynamic Content Area */}
@@ -470,39 +475,23 @@ export default function App() {
               </div>
             </section>
 
-            {/* Local Businesses Highlights */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-slate-200/80">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
-                <div>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 text-xs font-semibold mb-1 border border-amber-200">
-                    <Building2 className="w-3.5 h-3.5 text-amber-600" />
-                    <span>Lojas Físicas e Serviços do Bairro</span>
-                  </div>
-                  <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-                    Empresas & Comércios Locais em {selectedCity.nome}
-                  </h2>
-                </div>
+            {/* Local Businesses & Commercial Advertisements Carousel */}
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 border-t border-slate-200/80">
+              <BusinessCarousel
+                businesses={businesses}
+                onViewProfile={(b) => setSelectedBizForModal(b)}
+                onOpenRegisterModal={() => setIsBusinessRegisterModalOpen(true)}
+                getCategoryName={getCategoryName}
+              />
 
+              <div className="mt-4 flex justify-end">
                 <button
                   onClick={() => setCurrentTab('empresas')}
-                  className="text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center gap-1 cursor-pointer self-start sm:self-auto"
+                  className="text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center gap-1 cursor-pointer"
                 >
-                  <span>Ver todas as lojas</span>
+                  <span>Ver todas as lojas e filtrar por bairro em Sorocaba</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {filteredBusinesses.slice(0, 3).map((biz) => (
-                  <BusinessCard
-                    key={biz.id}
-                    business={biz}
-                    categoryName={getCategoryName(biz.categoriaId)}
-                    isFavorite={favorites.includes(biz.id)}
-                    onToggleFavorite={handleToggleFavorite}
-                    onViewProfile={(b) => setSelectedBizForModal(b)}
-                  />
-                ))}
               </div>
             </section>
 
@@ -511,14 +500,14 @@ export default function App() {
               <div className="bg-gradient-to-r from-teal-900 to-slate-900 rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
                 <div className="space-y-2 max-w-xl">
                   <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-300 bg-amber-400/20 px-3 py-1 rounded-full">
-                    <Gift className="w-3.5 h-3.5" />
-                    <span>Campanha de Inauguração em Sorocaba</span>
+                    <Zap className="w-3.5 h-3.5" />
+                    <span>Pacote de Oportunidades: R$ 9,99 = 10 Serviços</span>
                   </div>
                   <h3 className="text-2xl font-extrabold text-white">
                     Você é profissional autônomo ou tem uma loja em Sorocaba?
                   </h3>
                   <p className="text-sm text-teal-100 leading-relaxed">
-                    Cadastre-se hoje e ganhe 6 meses de degustação sem pagar comissão por orçamento nem taxas escondidas. Contato direto de clientes pelo seu WhatsApp.
+                    Cadastre-se hoje e receba 10 oportunidades liberadas por apenas R$ 9,99 via PIX direto na tela. Sem mensalidades caras e sem comissão por orçamento.
                   </p>
                 </div>
 
@@ -528,7 +517,7 @@ export default function App() {
                     onClick={() => setIsRegisterProModalOpen(true)}
                     className="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm transition text-center cursor-pointer shadow-md"
                   >
-                    Cadastrar como Profissional (6M Grátis)
+                    Cadastrar como Profissional
                   </button>
 
                   <button
@@ -738,41 +727,98 @@ export default function App() {
 
         {/* VIEW: BUSINESSES & STORES */}
         {currentTab === 'empresas' && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-7">
+            {/* Top Carousel of Advertisements & Sponsored Stores */}
+            <BusinessCarousel
+              businesses={businesses}
+              onViewProfile={(b) => setSelectedBizForModal(b)}
+              onOpenRegisterModal={() => setIsBusinessRegisterModalOpen(true)}
+              getCategoryName={getCategoryName}
+            />
+
+            {/* Header with Title & Registration CTA */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
               <div>
-                <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-                  Empresas, Lojas & Comércios em {selectedCity.nome}
+                <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                  <Store className="w-6 h-6 text-amber-600" />
+                  <span>Guia de Empresas & Comércios Locais em {selectedCity.nome}</span>
                 </h1>
-                <p className="text-sm text-slate-500">
-                  Consulte endereços, rotas no Google Maps, catálogo de produtos e fale no WhatsApp.
+                <p className="text-sm text-slate-600 mt-1">
+                  Ache a loja mais perto da sua casa, confira o endereço no mapa e faça seu pedido direto pelo WhatsApp!
                 </p>
               </div>
 
               <button
-                onClick={() => {
-                  const newBiz = StorageService.registerBusiness({
-                    nome: 'Minha Nova Loja Sorocaba',
-                    categoriaId: 'cat-pet',
-                    cidadeId: selectedCityId,
-                    bairro: 'Campolim',
-                    endereco: 'Av. Professora Izoraida Marques Peres, 401',
-                    telefone: '(15) 3333-2222',
-                    whatsapp: '15991122334',
-                    descricao: 'Loja completa com atendimento personalizado em Sorocaba.',
-                    servicosOuProdutos: ['Rações Premium', 'Banho & Tosa', 'Acessórios']
-                  });
-                  refreshAllState();
-                  setCurrentTab('painel_empresa');
-                }}
-                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold shadow-xs transition cursor-pointer self-start sm:self-auto"
+                onClick={() => setIsBusinessRegisterModalOpen(true)}
+                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 text-white text-xs font-black shadow-md transition cursor-pointer self-start sm:self-auto shrink-0"
+                title="Cadastre sua empresa e pague taxa via PIX"
               >
                 <PlusCircle className="w-4 h-4" />
-                <span>Cadastrar Minha Empresa</span>
+                <span>Anuncie Sua Loja (Taxa PIX)</span>
               </button>
             </div>
 
-            {/* Filter toolbar */}
+            {/* Neighborhood Quick Filter Pills */}
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
+                  <MapPin className="w-4 h-4 text-teal-600" />
+                  <span>Filtrar por Bairro em Sorocaba (Ache perto de você):</span>
+                </div>
+
+                {selectedNeighborhood && (
+                  <button
+                    onClick={() => setSelectedNeighborhood(null)}
+                    className="text-xs text-amber-700 font-bold hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>Limpar bairro ({selectedNeighborhood})</span>
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              {/* Horizontal scrollable pills */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-thin">
+                <button
+                  onClick={() => setSelectedNeighborhood(null)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer ${
+                    !selectedNeighborhood
+                      ? 'bg-amber-600 text-white shadow-xs'
+                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                  }`}
+                >
+                  Todos os Bairros
+                </button>
+
+                {(selectedCity.bairrosPrincipais || selectedCity.bairros || []).map((bairroName: string, idx: number) => {
+                  const isSelected = selectedNeighborhood === bairroName;
+                  const count = businesses.filter(b => b.bairro === bairroName && b.status === 'ATIVO').length;
+
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedNeighborhood(isSelected ? null : bairroName)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                        isSelected
+                          ? 'bg-amber-600 text-white shadow-xs'
+                          : 'bg-slate-100 hover:bg-amber-50 hover:text-amber-900 text-slate-700'
+                      }`}
+                    >
+                      <span>{bairroName}</span>
+                      {count > 0 && (
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+                          isSelected ? 'bg-amber-700 text-white' : 'bg-slate-200 text-slate-700'
+                        }`}>
+                          {count}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Filter toolbar: Search, Category, Full Neighborhood dropdown */}
             <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="relative">
@@ -805,7 +851,7 @@ export default function App() {
                   <select
                     value={selectedNeighborhood || ''}
                     onChange={(e) => setSelectedNeighborhood(e.target.value || null)}
-                    className="w-full py-2 px-3 rounded-xl border border-slate-300 text-xs bg-white focus:ring-2 focus:ring-amber-500"
+                    className="w-full py-2 px-3 rounded-xl border border-slate-300 text-xs bg-white focus:ring-2 focus:ring-amber-500 font-medium"
                   >
                     <option value="">Todos os Bairros de {selectedCity.nome}</option>
                     {(selectedCity.bairrosPrincipais || selectedCity.bairros || []).map((b: string, idx: number) => (
@@ -816,22 +862,45 @@ export default function App() {
                   </select>
                 </div>
               </div>
+
+              {/* Status banner */}
+              <div className="flex items-center justify-between text-xs text-slate-600 pt-1 border-t border-slate-100">
+                <span>
+                  Mostrando <strong>{filteredBusinesses.length} comércios</strong> {selectedNeighborhood ? `no bairro ${selectedNeighborhood}` : 'em Sorocaba'}.
+                </span>
+                {(searchQuery || selectedCategoryId || selectedNeighborhood) && (
+                  <button
+                    onClick={clearAllFilters}
+                    className="text-amber-700 font-bold hover:underline cursor-pointer"
+                  >
+                    Limpar todos os filtros
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Results Grid */}
             {filteredBusinesses.length === 0 ? (
-              <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center max-w-md mx-auto">
+              <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center max-w-md mx-auto shadow-xs">
                 <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-2" />
-                <h3 className="font-bold text-slate-800">Nenhuma empresa encontrada</h3>
+                <h3 className="font-bold text-slate-800">Nenhum comércio encontrado</h3>
                 <p className="text-xs text-slate-500 mt-1 mb-4">
-                  Tente alterar seus termos de busca ou categoria.
+                  Não encontramos lojas com os filtros selecionados {selectedNeighborhood && `no bairro ${selectedNeighborhood}`}.
                 </p>
-                <button
-                  onClick={clearAllFilters}
-                  className="px-4 py-2 bg-amber-600 text-white rounded-xl text-xs font-semibold"
-                >
-                  Limpar Filtros
-                </button>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                  <button
+                    onClick={clearAllFilters}
+                    className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-semibold cursor-pointer"
+                  >
+                    Ver Todas as Lojas de Sorocaba
+                  </button>
+                  <button
+                    onClick={() => setIsBusinessRegisterModalOpen(true)}
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-semibold cursor-pointer"
+                  >
+                    Cadastrar Loja no Bairro
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1014,6 +1083,19 @@ export default function App() {
           onClose={() => setSelectedBizForModal(null)}
         />
       )}
+
+      {/* Business Register & Fee Payment Modal (Taxa PIX) */}
+      <BusinessRegisterModal
+        isOpen={isBusinessRegisterModalOpen}
+        onClose={() => setIsBusinessRegisterModalOpen(false)}
+        categories={categories}
+        selectedCity={selectedCity}
+        onSuccess={(newBiz) => {
+          refreshAllState();
+          setIsBusinessRegisterModalOpen(false);
+          setSelectedBizForModal(newBiz);
+        }}
+      />
 
       {/* Service Request Creation Modal */}
       <ServiceRequestModal

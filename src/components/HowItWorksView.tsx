@@ -9,7 +9,8 @@ import {
   Store,
   Navigation,
   CheckCircle2,
-  ArrowRight
+  ArrowRight,
+  Coins
 } from 'lucide-react';
 
 export const HowItWorksView: React.FC<{
@@ -109,18 +110,18 @@ export const HowItWorksView: React.FC<{
           </div>
           <div>
             <h2 className="text-xl font-extrabold text-white">Para Profissionais Autônomos</h2>
-            <p className="text-xs text-teal-200">6 Meses Grátis de degustação com zero comissões</p>
+            <p className="text-xs text-teal-200">10 Oportunidades por apenas R$ 9,99 via PIX na tela com zero comissões</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-slate-800">
           <div className="p-5 rounded-2xl bg-white/95 space-y-2.5">
             <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold">
-              <Gift className="w-5 h-5" />
+              <Coins className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-slate-900 text-sm">1. Sem Taxas por Orçamento</h3>
+            <h3 className="font-bold text-slate-900 text-sm">1. R$ 9,99 = 10 Oportunidades</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Não cobramos comissão sobre seu trabalho nem taxas para você mandar propostas. Você fica com 100% do valor combinado.
+              Recarregue direto na sua tela via QR Code PIX (CPF). Você recebe 10 contatos de clientes liberados e fica com 100% do valor do serviço.
             </p>
           </div>
 
@@ -151,7 +152,7 @@ export const HowItWorksView: React.FC<{
               onClick={onOpenRegisterPro}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-sm font-black shadow-md transition cursor-pointer"
             >
-              <span>Cadastrar Meu Perfil Grátis (6 Meses)</span>
+              <span>Cadastrar Meu Perfil Profissional</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           )}

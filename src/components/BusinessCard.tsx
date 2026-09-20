@@ -85,10 +85,14 @@ export const BusinessCard: React.FC<BusinessCardProps> = ({
             <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-white' : ''}`} />
           </button>
 
-          {/* Category overlay */}
-          <div className="absolute bottom-2 left-2.5 text-xs text-white/95 font-medium flex items-center gap-1">
-            <span className="bg-black/40 backdrop-blur-xs px-2 py-0.5 rounded-md text-[11px]">
+          {/* Category & Neighborhood overlay */}
+          <div className="absolute bottom-2 left-2.5 right-2.5 text-xs text-white/95 font-medium flex items-center justify-between gap-1">
+            <span className="bg-black/50 backdrop-blur-xs px-2 py-0.5 rounded-md text-[11px] text-white">
               {categoryName}
+            </span>
+            <span className="bg-white/95 text-slate-900 px-2 py-0.5 rounded-md text-[11px] font-bold shadow-xs flex items-center gap-1">
+              <MapPin className="w-3 h-3 text-teal-600" />
+              {business.bairro}
             </span>
           </div>
         </div>

@@ -13,7 +13,8 @@ import {
   Trash2,
   Sparkles,
   ArrowRight,
-  UserCheck
+  UserCheck,
+  Coins
 } from 'lucide-react';
 import { City, ServiceCategory, Professional, User } from '../types.ts';
 import { StorageService } from '../services/storage.ts';
@@ -116,6 +117,16 @@ const CATEGORY_SUGGESTIONS: Record<string, string[]> = {
     'Manicure e Pedicure',
     'Design de Sobrancelhas',
     'Maquiagem Social'
+  ],
+  'cat-esquadrias-blindex': [
+    'Instalação de Box Blindex',
+    'Esquadrias de Alumínio Sob Medida',
+    'Portas e Janelas Linha Suprema e Gold',
+    'Fechamento de Sacadas em Vidro Retrátil',
+    'Troca de Roldanas, Fechos e Guias',
+    'Guarda-Corpo de Vidro e Alumínio',
+    'Espelhos Bisotados e Lapidados',
+    'Substituição de Vidro Quebrado e Vedações'
   ]
 };
 
@@ -313,15 +324,15 @@ export const ProfessionalRegisterModal: React.FC<ProfessionalRegisterModalProps>
           </button>
 
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400 text-slate-950 text-xs font-black mb-2 shadow-xs">
-            <Gift className="w-3.5 h-3.5 text-slate-950" />
-            <span>6 MESES DE DEGUSTAÇÃO 100% GRÁTIS</span>
+            <Coins className="w-3.5 h-3.5 text-slate-950" />
+            <span>10 OPORTUNIDADES POR R$ 9,99 VIA PIX</span>
           </div>
 
           <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
             Cadastro de Prestador de Serviços
           </h2>
           <p className="text-xs sm:text-sm text-teal-100 mt-1 max-w-lg">
-            Receba pedidos de clientes de {selectedCity.nome} e região diretamente no seu WhatsApp, com 0% de comissão.
+            Receba pedidos de clientes de {selectedCity.nome} e região diretamente no seu WhatsApp, com 0% de comissão e 10 oportunidades liberadas.
           </p>
         </div>
 
@@ -355,11 +366,11 @@ export const ProfessionalRegisterModal: React.FC<ProfessionalRegisterModalProps>
 
               <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200/70">
                 <div className="text-xs font-bold text-amber-900 flex items-center gap-1">
-                  <Gift className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Plano 6 Meses</span>
+                  <Coins className="w-3.5 h-3.5 text-amber-600" />
+                  <span>10 Oportunidades</span>
                 </div>
                 <div className="text-[11px] text-amber-700 mt-1">
-                  Sem nenhuma mensalidade até {new Date(registeredResult.professional.plano.dataTermino).toLocaleDateString('pt-BR')}.
+                  {registeredResult.professional.oportunidadesDisponiveis ?? 10} oportunidades liberadas para negociar direto.
                 </div>
               </div>
 
@@ -771,13 +782,13 @@ export const ProfessionalRegisterModal: React.FC<ProfessionalRegisterModalProps>
               </div>
             </div>
 
-            {/* Aviso de Transparência dos 6 Meses */}
+            {/* Aviso de Transparência do Modelo por Oportunidades */}
             <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 flex items-start gap-3">
-              <Gift className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+              <Coins className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
               <div className="text-xs text-amber-900 space-y-1">
-                <span className="font-bold">Termos da Degustação Gratuita (6 Meses):</span>
+                <span className="font-bold">Modelo por Oportunidades (R$ 9,99 = 10 Serviços):</span>
                 <p className="text-[11px] text-amber-800 leading-relaxed">
-                  Seu cadastro concede 180 dias de uso ilimitado sem custo algum. Você não paga taxa por lead nem porcentagem sobre os serviços. O cliente fecha e paga diretamente a você.
+                  Você recebe 10 oportunidades liberadas para testar o sistema. Recargas subsequentes custam apenas R$ 9,99 via QR Code PIX direto na tela para 10 novos contatos de clientes, sem porcentagens ou mensalidades.
                 </p>
               </div>
             </div>

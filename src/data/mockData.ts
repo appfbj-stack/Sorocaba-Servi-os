@@ -23,14 +23,17 @@ export const INITIAL_CITIES: City[] = [
       'Wanel Ville',
       'Além Ponte',
       'Trujillo',
+      'Éden',
+      'Zona Industrial',
+      'Santa Rosália',
+      'Vila Hortência',
       'Mangal',
       'Jardim dos Estados',
-      'Vila Hortência',
-      'Santa Rosália',
+      'Vila Carvalho',
+      'Vila Santana',
       'Jardim Paulistano',
       'Vila Lucy',
       'Brigadeiro Tobias',
-      'Éden',
       'Vila Progresso',
       'Jardim América'
     ]
@@ -172,6 +175,58 @@ export const INITIAL_CATEGORIES: ServiceCategory[] = [
     descricao: 'Carretos rápidos em Sorocaba e região, mudanças residenciais e montagem inclusa.',
     popular: false,
     servicosPadrao: ['Carreto Urbano Sorocaba', 'Mudança Residencial Completa', 'Transporte de Móveis e Eletros', 'Frete para Votorantim e Região', 'Içamento de Móveis']
+  },
+  {
+    id: 'cat-esquadrias-blindex',
+    nome: 'Esquadrias de Alumínio & Blindex',
+    slug: 'esquadrias-aluminio-blindex',
+    icone: 'AppWindow',
+    descricao: 'Instalação e manutenção de esquadrias de alumínio sob medida, box blindex, vidros temperados, portas, janelas e fechamento de sacadas.',
+    popular: true,
+    servicosPadrao: [
+      'Instalação de Box Blindex',
+      'Esquadrias de Alumínio Sob Medida',
+      'Portas e Janelas de Alumínio (Linha Suprema e Gold)',
+      'Fechamento de Sacada e Varanda em Vidro',
+      'Manutenção e Troca de Roldanas, Fechos e Guias',
+      'Instalação de Guarda-Corpo de Vidro e Alumínio',
+      'Espelhos Lapidados e Bisotados para Banheiro e Sala',
+      'Substituição de Vidro Quebrado e Vedações de Silicone'
+    ]
+  },
+  {
+    id: 'cat-ajudantes',
+    nome: 'Ajudantes, Carga & Diárias',
+    slug: 'ajudantes-servicos-gerais',
+    icone: 'Boxes',
+    descricao: 'Ajudantes para descarregar caminhão, carga e descarga, entregas rápidas, panfletagem de eleições e eventos, e diárias gerais.',
+    popular: true,
+    servicosPadrao: [
+      'Ajudante para Descarregar Caminhão',
+      'Carga e Descarga de Mercadorias e Móveis',
+      'Auxiliar de Entregas Rápidas e Logística',
+      'Panfletagem (Eleições, Comércio e Eventos)',
+      'Ajudante de Mudança e Carga Pesada',
+      'Diária de Ajudante de Serviços Gerais',
+      'Organização de Estoque, Galpão e Depósito'
+    ]
+  },
+  {
+    id: 'cat-pedreiro',
+    nome: 'Pedreiros & Alvenaria',
+    slug: 'pedreiros-alvenaria',
+    icone: 'HardHat',
+    descricao: 'Pedreiros especializados em alvenaria, construção de muros, reboco, contrapiso, assentamento de blocos e reformas completas.',
+    popular: true,
+    servicosPadrao: [
+      'Construção de Muros e Alvenaria',
+      'Reboco, Chapisco e Emboço',
+      'Contrapiso e Regularização de Piso',
+      'Assentamento de Tijolos e Blocos de Concreto',
+      'Pequenas Reformas e Quebradeira',
+      'Estrutura de Concreto, Viga e Baldrame',
+      'Pedreiro por Diária ou Empreitada'
+    ]
   }
 ];
 
@@ -1110,6 +1165,236 @@ export const INITIAL_PROFESSIONALS: Professional[] = [
       origemCadastro: 'campanha'
     },
     criadoEm: '2026-02-22T11:00:00Z'
+  },
+  {
+    id: 'pro-21',
+    usuarioId: 'usr-pro-21',
+    nome: 'Marcos Vinícius de Souza',
+    tituloProfissional: 'Instalador de Esquadrias de Alumínio & Box Blindex',
+    fotoUrl: 'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=200&auto=format&fit=crop&q=80',
+    categoriaId: 'cat-esquadrias-blindex',
+    servicos: [
+      'Instalação de Box Blindex',
+      'Esquadrias de Alumínio Sob Medida',
+      'Portas Balcão e Janelas Linha Suprema',
+      'Troca de Roldanas, Guias e Fechos',
+      'Fechamento de Sacadas e Varandas em Vidro'
+    ],
+    descricao: 'Especialista em fabricação, instalação e manutenção de esquadrias de alumínio sob medida (linhas Suprema e Gold) e vidros temperados Blindex. Atendo residências, condomínios e lojas em Sorocaba, Votorantim e região. Mais de 12 anos de experiência com acabamento de alto padrão e pontualidade.',
+    cidadeId: 'cid-sorocaba',
+    bairrosAtendidos: ['Campolim', 'Wanel Ville', 'Centro', 'Santa Rosália', 'Além Ponte', 'Jardim América', 'Mangal', 'Trujillo'],
+    whatsapp: '5515998124455',
+    telefone: '(15) 99812-4455',
+    horarioAtendimento: 'Segunda a Sábado, das 08:00 às 18:30',
+    disponivelAgora: true,
+    verificado: true,
+    status: 'ATIVO',
+    notaMedia: 4.9,
+    totalAvaliacoes: 46,
+    portfolio: [
+      {
+        id: 'port-esq-1',
+        titulo: 'Box Blindex Elegance Preto Fosco',
+        descricao: 'Instalação de box frontal em vidro temperado 8mm incolor com roldanas aparentes no Campolim.',
+        fotoUrl: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&auto=format&fit=crop&q=80'
+      },
+      {
+        id: 'port-esq-2',
+        titulo: 'Porta Balcão de Alumínio 4 Folhas',
+        descricao: 'Fabricação sob medida com pintura eletrostática preta e fechaduras de segurança no Wanel Ville.',
+        fotoUrl: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=400&auto=format&fit=crop&q=80'
+      }
+    ],
+    plano: {
+      tipo: 'gratuito_6_meses',
+      nome: 'Degustação 6 Meses Grátis',
+      dataInicio: '2026-01-10T00:00:00Z',
+      dataTermino: '2026-07-10T00:00:00Z',
+      status: 'ativo',
+      limiteOrcamentosPorMes: 999,
+      origemCadastro: 'organico'
+    },
+    criadoEm: '2026-01-10T08:30:00Z'
+  },
+  {
+    id: 'pro-22',
+    usuarioId: 'usr-pro-22',
+    nome: 'Carlos Alberto Vidraçaria & Esquadrias',
+    tituloProfissional: 'Técnico em Vidros Temperados, Blindex & Esquadrias',
+    fotoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
+    categoriaId: 'cat-esquadrias-blindex',
+    servicos: [
+      'Fechamento de Sacada em Vidro Retrátil',
+      'Box Blindex Padrão e Até o Teto',
+      'Manutenção Preventiva de Esquadrias e Janelas',
+      'Guarda-Corpo de Vidro e Alumínio',
+      'Espelhos Bisotados e Lapidados'
+    ],
+    descricao: 'Instalação rápida de box blindex com pronta entrega em Sorocaba. Serviços de manutenção em janelas de alumínio emperradas, troca de roldanas gastas e vedação contra infiltração de chuva.',
+    cidadeId: 'cid-sorocaba',
+    bairrosAtendidos: ['Campolim', 'Centro', 'Trujillo', 'Vila Hortência', 'Éden', 'Santa Rosália', 'Jardim Paulistano'],
+    whatsapp: '5515991456789',
+    telefone: '(15) 99145-6789',
+    horarioAtendimento: 'Segunda a Sexta das 08:00 às 18:00 | Sábado das 08:00 às 13:00',
+    disponivelAgora: true,
+    verificado: true,
+    status: 'ATIVO',
+    notaMedia: 4.8,
+    totalAvaliacoes: 38,
+    portfolio: [
+      {
+        id: 'port-esq-3',
+        titulo: 'Fechamento de Sacada Cortina de Vidro',
+        descricao: 'Sistema de envidraçamento articulado sem esquadrias verticais em apartamento no Trujillo.',
+        fotoUrl: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&auto=format&fit=crop&q=80'
+      }
+    ],
+    plano: {
+      tipo: 'gratuito_6_meses',
+      nome: 'Degustação 6 Meses Grátis',
+      dataInicio: '2026-01-15T00:00:00Z',
+      dataTermino: '2026-07-15T00:00:00Z',
+      status: 'ativo',
+      limiteOrcamentosPorMes: 999,
+      origemCadastro: 'organico'
+    },
+    criadoEm: '2026-01-15T11:00:00Z'
+  },
+  {
+    id: 'pro-ajudante-1',
+    usuarioId: 'usr-pro-ajudante-1',
+    nome: 'Márcio Rogério Santos (Equipe Carga & Apoio)',
+    tituloProfissional: 'Ajudante Geral, Carga/Descarga de Caminhão & Entregas',
+    fotoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
+    categoriaId: 'cat-ajudantes',
+    servicos: [
+      'Ajudante para Descarregar Caminhão',
+      'Carga e Descarga de Mercadorias e Móveis',
+      'Auxiliar de Entregas Rápidas e Logística',
+      'Ajudante de Mudança e Carga Pesada',
+      'Diária de Ajudante de Serviços Gerais'
+    ],
+    descricao: 'Mais de 8 anos atuando com apoio operacional, diárias e logística em Sorocaba, Éden, Zona Industrial e Votorantim. Força física, agilidade e total cuidado no manuseio de caixas, paletes pesados, materiais de construção e mudanças.',
+    cidadeId: 'cid-sorocaba',
+    bairrosAtendidos: ['Éden', 'Zona Industrial', 'Além Ponte', 'Centro', 'Brigadeiro Tobias', 'Wanel Ville', 'Santa Rosália'],
+    whatsapp: '5515998112233',
+    telefone: '(15) 99811-2233',
+    horarioAtendimento: 'Segunda a Sábado, das 06:00 às 20:00 (plantão para carretas)',
+    disponivelAgora: true,
+    verificado: true,
+    status: 'ATIVO',
+    notaMedia: 4.9,
+    totalAvaliacoes: 42,
+    oportunidadesDisponiveis: 10,
+    pedidosDesbloqueadosIds: [],
+    portfolio: [
+      {
+        id: 'port-aju-1',
+        titulo: 'Descarga de Carreta Baú 24 Paletes',
+        descricao: 'Apoio em descarga rápida de carga fracionada e conferência em centro de distribuição no Éden.',
+        fotoUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&auto=format&fit=crop&q=80'
+      }
+    ],
+    plano: {
+      tipo: 'pacote_10_creditos',
+      nome: 'Pacote 10 Oportunidades PIX',
+      dataInicio: '2026-01-20T00:00:00Z',
+      status: 'ativo',
+      limiteOrcamentosPorMes: 999,
+      origemCadastro: 'organico'
+    },
+    criadoEm: '2026-01-20T08:00:00Z'
+  },
+  {
+    id: 'pro-ajudante-2',
+    usuarioId: 'usr-pro-ajudante-2',
+    nome: 'Lucas Vinícius Prado (Divulga Sorocaba)',
+    tituloProfissional: 'Panfletagem de Rua, Eleições & Ajudante de Entregas',
+    fotoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
+    categoriaId: 'cat-ajudantes',
+    servicos: [
+      'Panfletagem (Eleições, Comércio e Eventos)',
+      'Auxiliar de Entregas Rápidas e Logística',
+      'Organização de Estoque, Galpão e Depósito',
+      'Diária de Ajudante de Serviços Gerais'
+    ],
+    descricao: 'Atuação individual ou com equipe para panfletagem em semáforos, portas de comércio, feiras, eventos e campanhas eleitorais em toda Sorocaba. Responsabilidade, pontualidade, simpatia na entrega e envio de fotos/relatório do serviço.',
+    cidadeId: 'cid-sorocaba',
+    bairrosAtendidos: ['Centro', 'Campolim', 'Wanel Ville', 'Vila Hortência', 'Trujillo', 'Santa Rosália', 'Jardim dos Estados'],
+    whatsapp: '5515996554433',
+    telefone: '(15) 99655-4433',
+    horarioAtendimento: 'Todos os dias, das 07:00 às 19:00',
+    disponivelAgora: true,
+    verificado: true,
+    status: 'ATIVO',
+    notaMedia: 5.0,
+    totalAvaliacoes: 31,
+    oportunidadesDisponiveis: 10,
+    pedidosDesbloqueadosIds: [],
+    portfolio: [
+      {
+        id: 'port-aju-2',
+        titulo: 'Ação de Panfletagem Comercial e Eleitoral',
+        descricao: 'Distribuição orientada de materiais impressos em pontos estratégicos do Centro e Campolim com registro fotográfico.',
+        fotoUrl: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&auto=format&fit=crop&q=80'
+      }
+    ],
+    plano: {
+      tipo: 'pacote_10_creditos',
+      nome: 'Pacote 10 Oportunidades PIX',
+      dataInicio: '2026-02-01T00:00:00Z',
+      status: 'ativo',
+      limiteOrcamentosPorMes: 999,
+      origemCadastro: 'organico'
+    },
+    criadoEm: '2026-02-01T09:00:00Z'
+  },
+  {
+    id: 'pro-pedreiro-1',
+    usuarioId: 'usr-pro-pedreiro-1',
+    nome: 'Valdemar Soares de Almeida (Seu Valdemar)',
+    tituloProfissional: 'Mestre de Obras & Pedreiro de Alvenaria e Estrutura',
+    fotoUrl: 'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=200&auto=format&fit=crop&q=80',
+    categoriaId: 'cat-pedreiro',
+    servicos: [
+      'Construção de Muros e Alvenaria',
+      'Reboco, Chapisco e Emboço',
+      'Contrapiso e Regularização de Piso',
+      'Assentamento de Tijolos e Blocos de Concreto',
+      'Pequenas Reformas e Quebradeira',
+      'Estrutura de Concreto, Viga e Baldrame',
+      'Pedreiro por Diária ou Empreitada'
+    ],
+    descricao: 'Mais de 20 anos construindo e reformando em Sorocaba. Especialista em levantar paredes e muros no prumo e esquadro perfeito, reboco paulista liso, contra-piso impermeabilizado e fundação. Serviço limpo, honesto e com ótimas recomendações.',
+    cidadeId: 'cid-sorocaba',
+    bairrosAtendidos: ['Wanel Ville', 'Campolim', 'Além Ponte', 'Trujillo', 'Vila Hortência', 'Jardim dos Estados', 'Santa Rosália'],
+    whatsapp: '5515991887766',
+    telefone: '(15) 99188-7766',
+    horarioAtendimento: 'Segunda a Sexta das 07:00 às 17:00 | Sábado das 07:00 às 12:00',
+    disponivelAgora: true,
+    verificado: true,
+    status: 'ATIVO',
+    notaMedia: 4.9,
+    totalAvaliacoes: 65,
+    oportunidadesDisponiveis: 10,
+    pedidosDesbloqueadosIds: [],
+    portfolio: [
+      {
+        id: 'port-ped-1',
+        titulo: 'Muro de Bloco Aparente e Reboco',
+        descricao: 'Construção de muro de arrimo e divisa com 28 metros, sapatas reforçadas e reboco liso no Wanel Ville.',
+        fotoUrl: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&auto=format&fit=crop&q=80'
+      }
+    ],
+    plano: {
+      tipo: 'pacote_10_creditos',
+      nome: 'Pacote 10 Oportunidades PIX',
+      dataInicio: '2026-01-10T00:00:00Z',
+      status: 'ativo',
+      limiteOrcamentosPorMes: 999,
+      origemCadastro: 'organico'
+    },
+    criadoEm: '2026-01-10T07:30:00Z'
   }
 ];
 
@@ -1491,6 +1776,286 @@ export const INITIAL_BUSINESSES: Business[] = [
       cliquesSiteOuInsta: 240
     },
     criadoEm: '2026-02-05T14:30:00Z'
+  },
+  {
+    id: 'emp-11',
+    usuarioId: 'usr-emp-11',
+    nome: 'Vidraçaria & Esquadrias AlumiBlindex Sorocaba',
+    logoUrl: 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=150&auto=format&fit=crop&q=80',
+    fotos: [
+      'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&auto=format&fit=crop&q=80'
+    ],
+    descricao: 'Fabricação própria de esquadrias de alumínio linhas Suprema e Gold, box blindex padrão e até o teto, envidraçamento de sacadas retráteis, espelhos bisotados e portas pivotantes.',
+    categoriaId: 'cat-esquadrias-blindex',
+    cidadeId: 'cid-sorocaba',
+    bairro: 'Campolim',
+    endereco: 'Av. Professora Izoraida Marques Peres, 1200 - Campolim, Sorocaba - SP',
+    telefone: '(15) 3224-5500',
+    whatsapp: '5515998124455',
+    horarioAtendimento: 'Segunda a Sexta: 08h às 18h | Sábado: 08h às 13h',
+    site: 'https://alumiblindexsorocaba.com.br',
+    instagram: '@alumiblindex.sorocaba',
+    servicosOuProdutos: [
+      'Box Blindex Pronta Entrega e Sob Medida',
+      'Esquadrias Linha Suprema e Gold',
+      'Fechamento de Sacadas e Varandas Gourmet',
+      'Espelhos Bisotados para Lavabos e Salas',
+      'Guarda-Corpo em Alumínio e Vidro Laminado',
+      'Manutenção de Roldanas, Fechaduras e Vedações'
+    ],
+    patrocinada: true,
+    anuncioAtivo: true,
+    status: 'ATIVO',
+    notaMedia: 4.9,
+    totalAvaliacoes: 58,
+    analytics: {
+      visualizacoes: 1420,
+      cliquesWhatsapp: 380,
+      cliquesComoChegar: 210,
+      cliquesSiteOuInsta: 195
+    },
+    criadoEm: '2026-01-15T09:00:00Z'
+  },
+  {
+    id: 'emp-12',
+    usuarioId: 'usr-emp-12',
+    nome: 'Depósito Wanel - Materiais de Construção, Areia & Brita',
+    logoUrl: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=150&auto=format&fit=crop&q=80',
+    fotos: [
+      'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&auto=format&fit=crop&q=80'
+    ],
+    descricao: 'Depósito tradicional no Wanel Ville com entrega rápida em até 2 horas de areia lavada, brita, cimento Votoran, blocos estruturais, tijolos e tubos Tigre para obras residenciais e comerciais.',
+    categoriaId: 'cat-pedreiro',
+    cidadeId: 'cid-sorocaba',
+    bairro: 'Wanel Ville',
+    endereco: 'Av. Paulo Emanuel de Almeida, 1450 - Wanel Ville, Sorocaba - SP',
+    telefone: '(15) 3222-7700',
+    whatsapp: '5515997223344',
+    horarioAtendimento: 'Segunda a Sexta: 07h às 18h | Sábado: 07h às 13h',
+    site: 'https://depositowanel.com.br',
+    instagram: '@depositowanelsorocaba',
+    servicosOuProdutos: [
+      'Cimento Votoran CP-II e CP-III',
+      'Areia Lavada e Pedra Britada Ensacada ou a Granel',
+      'Blocos de Concreto Estrutural e Canaletas',
+      'Tubos, Conexões e Caixas d Água Tigre',
+      'Ferro Armado, Colunas e Malhas Pop'
+    ],
+    patrocinada: true,
+    posicaoDestaque: 2,
+    anuncioAtivo: true,
+    status: 'ATIVO',
+    notaMedia: 4.9,
+    totalAvaliacoes: 72,
+    analytics: {
+      visualizacoes: 1890,
+      cliquesWhatsapp: 540,
+      cliquesComoChegar: 310,
+      cliquesSiteOuInsta: 210
+    },
+    criadoEm: '2026-01-10T10:00:00Z'
+  },
+  {
+    id: 'emp-13',
+    usuarioId: 'usr-emp-13',
+    nome: 'Disk Gás Ultragaz, Água & Bebidas 24h Éden Express',
+    logoUrl: 'https://images.unsplash.com/photo-1527061011665-3652c757a4d4?w=150&auto=format&fit=crop&q=80',
+    fotos: [
+      'https://images.unsplash.com/photo-1527061011665-3652c757a4d4?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&auto=format&fit=crop&q=80'
+    ],
+    descricao: 'Entrega rápida de botijão de gás de cozinha Ultragaz P13 e P45, galão de água mineral Bonafont e Lindoya 20L, refrigerantes, carvão e fardos de gelo. Plantão diurno e noturno para Éden e Zona Industrial.',
+    categoriaId: 'cat-ajudantes',
+    cidadeId: 'cid-sorocaba',
+    bairro: 'Éden',
+    endereco: 'Rua Independência, 520 - Éden, Sorocaba - SP',
+    telefone: '(15) 3225-1122',
+    whatsapp: '5515998334455',
+    horarioAtendimento: 'Aberto Todos os dias: 07h às 23h30',
+    site: 'https://diskgasaguaeden.com.br',
+    instagram: '@gasaguaeden',
+    servicosOuProdutos: [
+      'Botijão de Gás P13 e P45 Ultragaz',
+      'Galão de Água Mineral 20 Litros',
+      'Cervejas, Refrigerantes e Energéticos em Fardos',
+      'Sacos de Gelo Filtrado e Carvão Vegetal',
+      'Entrega Expressa por Motoboy no Éden'
+    ],
+    patrocinada: true,
+    posicaoDestaque: 3,
+    anuncioAtivo: true,
+    status: 'ATIVO',
+    notaMedia: 4.8,
+    totalAvaliacoes: 96,
+    analytics: {
+      visualizacoes: 2310,
+      cliquesWhatsapp: 780,
+      cliquesComoChegar: 410,
+      cliquesSiteOuInsta: 180
+    },
+    criadoEm: '2026-01-12T08:30:00Z'
+  },
+  {
+    id: 'emp-14',
+    usuarioId: 'usr-emp-14',
+    nome: 'Padaria & Confeitaria Imperial Centro Sorocaba',
+    logoUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=150&auto=format&fit=crop&q=80',
+    fotos: [
+      'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&auto=format&fit=crop&q=80'
+    ],
+    descricao: 'Pães artesanais franceses crocantes a cada 30 minutos, café colonial completo, lanches no prato, salgados finos assados e fritos, e doces e bolos sob encomenda para aniversários e reuniões.',
+    categoriaId: 'cat-servicos',
+    cidadeId: 'cid-sorocaba',
+    bairro: 'Centro',
+    endereco: 'Rua São Bento, 410 - Centro, Sorocaba - SP',
+    telefone: '(15) 3231-6000',
+    whatsapp: '5515996118899',
+    horarioAtendimento: 'Segunda a Domingo: 06h às 21h',
+    site: 'https://padariaimperialsorocaba.com.br',
+    instagram: '@padariaimperialsorocaba',
+    servicosOuProdutos: [
+      'Pão Francês Quentinho e Pães de Fermentação Natural',
+      'Café da Manhã e Almoço Executivo',
+      'Bolos Decorados e Tortas Doces sob Encomenda',
+      'Kit Festa com Mini Salgados e Docinhos',
+      'Atendimento a Empresas e Faturamento Mensal'
+    ],
+    patrocinada: true,
+    posicaoDestaque: 4,
+    anuncioAtivo: true,
+    status: 'ATIVO',
+    notaMedia: 4.9,
+    totalAvaliacoes: 114,
+    analytics: {
+      visualizacoes: 3120,
+      cliquesWhatsapp: 620,
+      cliquesComoChegar: 530,
+      cliquesSiteOuInsta: 340
+    },
+    criadoEm: '2026-01-05T06:00:00Z'
+  },
+  {
+    id: 'emp-15',
+    usuarioId: 'usr-emp-15',
+    nome: 'Marmoraria & Granitos Arte & Pedra Além Ponte',
+    logoUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=150&auto=format&fit=crop&q=80',
+    fotos: [
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=600&auto=format&fit=crop&q=80'
+    ],
+    descricao: 'Especializada em bancadas de cozinha esculpidas em Quartzo Branco, granito Preto São Gabriel, mármore Travertino, lavatórios com cuba esculpida, ilhas gourmet e soleiras em Sorocaba e região.',
+    categoriaId: 'cat-pedreiro',
+    cidadeId: 'cid-sorocaba',
+    bairro: 'Além Ponte',
+    endereco: 'Av. São Paulo, 1820 - Além Ponte, Sorocaba - SP',
+    telefone: '(15) 3227-4400',
+    whatsapp: '5515997665544',
+    horarioAtendimento: 'Segunda a Sexta: 08h às 18h | Sábado: 08h às 12h',
+    site: 'https://marmorariaarteepedra.com.br',
+    instagram: '@marmorariaartepedra',
+    servicosOuProdutos: [
+      'Pias e Bancadas Gourmet em Granito e Quartzo',
+      'Lavatórios com Cubas Esculpidas',
+      'Ilhas e Balcões para Cozinha Americana',
+      'Soleiras, Peitoris e Degraus de Escada',
+      'Medição Técnica no Local sem Custo'
+    ],
+    patrocinada: true,
+    posicaoDestaque: 5,
+    anuncioAtivo: true,
+    status: 'ATIVO',
+    notaMedia: 5.0,
+    totalAvaliacoes: 47,
+    analytics: {
+      visualizacoes: 1450,
+      cliquesWhatsapp: 420,
+      cliquesComoChegar: 230,
+      cliquesSiteOuInsta: 190
+    },
+    criadoEm: '2026-01-18T09:00:00Z'
+  },
+  {
+    id: 'emp-16',
+    usuarioId: 'usr-emp-16',
+    nome: 'Autopeças & Baterias Express Trujillo',
+    logoUrl: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=150&auto=format&fit=crop&q=80',
+    fotos: [
+      'https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600&auto=format&fit=crop&q=80'
+    ],
+    descricao: 'Venda de peças para carros nacionais e importados, filtros, óleos lubrificantes, pastilhas de freio, socorro de bateria Heliar e Moura com entrega e instalação grátis a domicílio no Trujillo e Zona Norte.',
+    categoriaId: 'cat-mecanica',
+    cidadeId: 'cid-sorocaba',
+    bairro: 'Trujillo',
+    endereco: 'Rua Doutor Américo Figueiredo, 210 - Trujillo, Sorocaba - SP',
+    telefone: '(15) 3233-9900',
+    whatsapp: '5515991557788',
+    horarioAtendimento: 'Segunda a Sexta: 08h às 18h30 | Sábado: 08h às 14h',
+    site: 'https://autopecastrujillo.com.br',
+    instagram: '@autopecastrujillo',
+    servicosOuProdutos: [
+      'Baterias Moura e Heliar com Instalação a Domicílio Grátis',
+      'Pastilhas de Freio Fras-le e Bosch',
+      'Óleos Motul, Castrol, Mobil e Troca Rápida',
+      'Amortecedores Cofap e Monroe',
+      'Atendimento Rápido via WhatsApp e Entrega Expressa'
+    ],
+    patrocinada: true,
+    posicaoDestaque: 6,
+    anuncioAtivo: true,
+    status: 'ATIVO',
+    notaMedia: 4.9,
+    totalAvaliacoes: 88,
+    analytics: {
+      visualizacoes: 2190,
+      cliquesWhatsapp: 670,
+      cliquesComoChegar: 380,
+      cliquesSiteOuInsta: 240
+    },
+    criadoEm: '2026-01-08T08:00:00Z'
+  },
+  {
+    id: 'emp-17',
+    usuarioId: 'usr-emp-17',
+    nome: 'LogSorocaba - Mudanças, Fretes & Guarda-Móveis Zona Industrial',
+    logoUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=150&auto=format&fit=crop&q=80',
+    fotos: [
+      'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?w=600&auto=format&fit=crop&q=80'
+    ],
+    descricao: 'Transportes e mudanças comerciais e residenciais com frota própria de caminhões baú com plataforma elevatória, mantas protetoras e equipe de ajudantes experientes para carregar e descarregar na Zona Industrial e Sorocaba.',
+    categoriaId: 'cat-ajudantes',
+    cidadeId: 'cid-sorocaba',
+    bairro: 'Zona Industrial',
+    endereco: 'Av. Jerome Case, 980 - Zona Industrial, Sorocaba - SP',
+    telefone: '(15) 3238-5000',
+    whatsapp: '5515997441122',
+    horarioAtendimento: 'Segunda a Sábado: 07h às 20h (Plantão WhatsApp 24h)',
+    site: 'https://logsorocabamudancas.com.br',
+    instagram: '@logsorocabamudancas',
+    servicosOuProdutos: [
+      'Mudanças Residenciais e Comerciais Completas',
+      'Caminhão Baú com Equipe de Carga e Descarga',
+      'Embalagem Especial com Plástico Bolha e Caixas',
+      'Içamento de Móveis e Cargas Pesadas',
+      'Fretes Rápidos para Sorocaba e Interior de SP'
+    ],
+    patrocinada: true,
+    posicaoDestaque: 7,
+    anuncioAtivo: true,
+    status: 'ATIVO',
+    notaMedia: 5.0,
+    totalAvaliacoes: 63,
+    analytics: {
+      visualizacoes: 1980,
+      cliquesWhatsapp: 590,
+      cliquesComoChegar: 270,
+      cliquesSiteOuInsta: 220
+    },
+    criadoEm: '2026-01-14T07:00:00Z'
   }
 ];
 
@@ -1618,6 +2183,102 @@ export const INITIAL_REQUESTS: ServiceRequest[] = [
     avaliacaoId: 'rev-1',
     criadoEm: '2026-09-15T10:00:00Z',
     atualizadoEm: '2026-09-16T17:00:00Z'
+  },
+  {
+    id: 'req-5',
+    clienteId: 'cli-2',
+    clienteNome: 'Ricardo Antunes Mendes',
+    clienteWhatsapp: '5515997812244',
+    categoriaId: 'cat-esquadrias-blindex',
+    servico: 'Instalação de Box Blindex e Janela de Alumínio',
+    descricao: 'Preciso instalar um box blindex frontal fumê 8mm no banheiro social e trocar a janela de alumínio do quarto que está com as roldanas quebradas e emperrada.',
+    cidadeId: 'cid-sorocaba',
+    bairro: 'Wanel Ville',
+    dataDesejada: '2026-09-24',
+    horarioPreferencia: 'manha',
+    urgencia: 'alta',
+    fotos: [
+      'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&auto=format&fit=crop&q=80'
+    ],
+    status: 'profissional_interessado',
+    propostas: [
+      {
+        id: 'prop-5',
+        pedidoId: 'req-5',
+        profissionalId: 'pro-21',
+        profissionalNome: 'Marcos Vinícius de Souza',
+        profissionalFoto: 'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=200&auto=format&fit=crop&q=80',
+        profissionalWhatsapp: '5515998124455',
+        valorEstimado: 480,
+        prazoEstimado: 'Quarta-feira 09:00',
+        mensagem: 'Olá Ricardo! Tenho o kit box blindex com perfil de alumínio reforçado e roldanas blindadas de alta durabilidade. Faço também o alinhamento da janela.',
+        criadoEm: '2026-09-18T14:20:00Z',
+        status: 'enviado'
+      }
+    ],
+    criadoEm: '2026-09-18T12:00:00Z',
+    atualizadoEm: '2026-09-18T14:20:00Z'
+  },
+  {
+    id: 'req-6',
+    clienteId: 'cli-1',
+    clienteNome: 'Mariana Silva Borges (Distribuidora)',
+    clienteWhatsapp: '5515991234567',
+    categoriaId: 'cat-ajudantes',
+    servico: 'Ajudante para Descarregar Caminhão',
+    descricao: 'Preciso de 2 ajudantes com disposição física para descarregar um caminhão baú com 180 caixas e fardos no depósito no Éden/Zona Industrial. Previsão de início às 08h30 com duração de 4 horas.',
+    cidadeId: 'cid-sorocaba',
+    bairro: 'Éden',
+    dataDesejada: '2026-09-23',
+    horarioPreferencia: 'manha',
+    urgencia: 'urgente',
+    fotos: [
+      'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&auto=format&fit=crop&q=80'
+    ],
+    status: 'aberto',
+    propostas: [],
+    criadoEm: '2026-09-19T10:00:00Z',
+    atualizadoEm: '2026-09-19T10:00:00Z'
+  },
+  {
+    id: 'req-7',
+    clienteId: 'cli-2',
+    clienteNome: 'Ricardo Antunes Mendes',
+    clienteWhatsapp: '5515997812244',
+    categoriaId: 'cat-ajudantes',
+    servico: 'Panfletagem (Eleições, Comércio e Eventos)',
+    descricao: 'Preciso de pessoas para panfletagem de material gráfico informativo em cruzamentos estratégicos e calçadão do Centro de Sorocaba durante a manhã (08:00 às 12:00). Pago diária justa no término.',
+    cidadeId: 'cid-sorocaba',
+    bairro: 'Centro',
+    dataDesejada: '2026-09-24',
+    horarioPreferencia: 'manha',
+    urgencia: 'normal',
+    fotos: [],
+    status: 'aberto',
+    propostas: [],
+    criadoEm: '2026-09-19T11:30:00Z',
+    atualizadoEm: '2026-09-19T11:30:00Z'
+  },
+  {
+    id: 'req-8',
+    clienteId: 'cli-4',
+    clienteNome: 'Juliana Camargo Dias',
+    clienteWhatsapp: '5515998765432',
+    categoriaId: 'cat-pedreiro',
+    servico: 'Construção de Muros e Alvenaria',
+    descricao: 'Preciso de pedreiro de confiança para construir muro de divisa no quintal (aproximadamente 16 metros por 2m de altura) com bloco de concreto de 14, colunas de ferro e reboco liso no Wanel Ville.',
+    cidadeId: 'cid-sorocaba',
+    bairro: 'Wanel Ville',
+    dataDesejada: '2026-09-25',
+    horarioPreferencia: 'manha',
+    urgencia: 'alta',
+    fotos: [
+      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&auto=format&fit=crop&q=80'
+    ],
+    status: 'aberto',
+    propostas: [],
+    criadoEm: '2026-09-19T14:10:00Z',
+    atualizadoEm: '2026-09-19T14:10:00Z'
   }
 ];
 
@@ -1666,6 +2327,18 @@ export const INITIAL_REVIEWS: Review[] = [
     nota: 5,
     comentario: 'Levo meu Spitz Alemão na Pet Mania há 2 anos. A tosa na tesoura é espetacular e eles cuidam dos animais com muito amor!',
     criadoEm: '2026-09-08T11:20:00Z'
+  },
+  {
+    id: 'rev-5',
+    pedidoId: 'req-5',
+    alvoTipo: 'profissional',
+    alvoId: 'pro-21',
+    clienteId: 'cli-3',
+    clienteNome: 'Beatriz Vasconcelos',
+    clienteFoto: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+    nota: 5,
+    comentario: 'O Marcos instalou o box blindex do meu banheiro e regulou as portas de correr de alumínio da sala. Trabalho impecável, sem sujeira e muito caprichoso!',
+    criadoEm: '2026-09-14T15:00:00Z'
   }
 ];
 

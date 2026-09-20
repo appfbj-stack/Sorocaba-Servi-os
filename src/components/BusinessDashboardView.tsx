@@ -60,12 +60,12 @@ export const BusinessDashboardView: React.FC<BusinessDashboardViewProps> = ({
         </div>
 
         {/* Sponsored Toggle Badge */}
-        <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-200 w-full md:w-auto justify-between">
+        <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200 w-full md:w-auto justify-between">
           <div className="px-2">
-            <span className="text-xs font-bold text-slate-700 block">Destaque de Anúncio</span>
+            <span className="text-xs font-bold text-slate-700 block">Destaque Comercial & Propaganda</span>
             <span className={`text-[11px] font-semibold flex items-center gap-1.5 ${isSponsored ? 'text-amber-600' : 'text-slate-500'}`}>
               <Award className="w-3.5 h-3.5" />
-              {isSponsored ? 'Patrocinada Ativa (Topo da Categoria)' : 'Listagem Gratuita Padrão'}
+              {isSponsored ? 'Plano Carrossel Ativo (Carrossel Superior & Bairros)' : 'Plano Comercial Local Básico'}
             </span>
           </div>
 
@@ -78,7 +78,7 @@ export const BusinessDashboardView: React.FC<BusinessDashboardViewProps> = ({
                 : 'bg-teal-600 hover:bg-teal-700 text-white'
             }`}
           >
-            <span>{isSponsored ? 'Desativar Destaque' : 'Ativar Destaque'}</span>
+            <span>{isSponsored ? 'Desativar Carrossel' : 'Ativar Destaque no Carrossel'}</span>
           </button>
         </div>
       </div>

@@ -102,7 +102,7 @@ export const Footer: React.FC<FooterProps> = ({
             </p>
           </div>
           <p className="text-[11px] text-amber-300/80">
-            ★ Primeiros profissionais contam com 6 meses de gratuidade completa.
+            ★ Pacote de oportunidades: R$ 9,99 = 10 clientes liberados via PIX na tela.
           </p>
           <div className="space-y-2 pt-1">
             {onOpenRegisterClient && (

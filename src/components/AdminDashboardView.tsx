@@ -15,7 +15,10 @@ import {
   AlertTriangle,
   Gift,
   ExternalLink,
-  Search
+  Search,
+  Coins,
+  QrCode,
+  Zap
 } from 'lucide-react';
 import {
   Professional,
@@ -89,6 +92,11 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
 
   const handleExtendTrial = (proId: string) => {
     StorageService.extendProfessionalTrial(proId, 180);
+    onRefresh();
+  };
+
+  const handleLiberar10Creditos = (proId: string) => {
+    StorageService.addProfessionalCredits(proId, 10, 9.99, '02598018796');
     onRefresh();
   };
 
@@ -306,9 +314,9 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                       {pro.tituloProfissional}
                     </td>
                     <td className="py-3 px-3">
-                      <span className="inline-flex items-center gap-1 text-[11px] text-teal-700 font-semibold bg-teal-50 px-2 py-0.5 rounded-md">
-                        <Gift className="w-3 h-3" />
-                        <span>6 Meses Grátis</span>
+                      <span className="inline-flex items-center gap-1 text-[11px] text-teal-800 font-bold bg-teal-50 px-2 py-0.5 rounded-md border border-teal-200">
+                        <Coins className="w-3 h-3 text-amber-500" />
+                        <span>{pro.oportunidadesDisponiveis ?? 10} Créditos</span>
                       </span>
                     </td>
                     <td className="py-3 px-3">
@@ -348,11 +356,12 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                           </button>
                         )}
                         <button
-                          onClick={() => handleExtendTrial(pro.id)}
-                          className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md text-[10px] font-semibold cursor-pointer"
-                          title="Estender período gratuito em 6 meses"
+                          onClick={() => handleLiberar10Creditos(pro.id)}
+                          className="px-2 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-md text-[10px] font-bold cursor-pointer flex items-center gap-1"
+                          title="Liberar 10 oportunidades (Recarga PIX R$ 9,99)"
                         >
-                          +180d
+                          <Coins className="w-3 h-3 text-amber-600" />
+                          <span>+10 Créditos</span>
                         </button>
                       </div>
                     </td>

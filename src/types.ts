@@ -47,13 +47,24 @@ export interface User {
 }
 
 export interface ProfessionalPlan {
-  tipo: 'gratuito_6_meses' | 'profissional' | 'pro';
+  tipo: 'gratuito_6_meses' | 'profissional' | 'pro' | 'pacote_10_creditos';
   nome: string;
   dataInicio: string;
-  dataTermino: string;
+  dataTermino?: string;
   status: 'ativo' | 'expirado' | 'aviso_vencimento';
   limiteOrcamentosPorMes: number;
   origemCadastro: 'organico' | 'indicacao' | 'campanha';
+}
+
+export interface PixRechargeTransaction {
+  id: string;
+  profissionalId: string;
+  profissionalNome: string;
+  valor: number;
+  oportunidadesLiberadas: number;
+  chavePix: string;
+  status: 'concluido' | 'pendente';
+  dataHora: string;
 }
 
 export interface PortfolioItem {
@@ -87,6 +98,8 @@ export interface Professional {
   totalAvaliacoes: number;
   portfolio: (PortfolioItem | string)[];
   plano: ProfessionalPlan;
+  oportunidadesDisponiveis?: number;
+  pedidosDesbloqueadosIds?: string[];
   criadoEm: string;
 }
 

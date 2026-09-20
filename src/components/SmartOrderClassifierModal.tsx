@@ -45,12 +45,13 @@ export const SmartOrderClassifierModal: React.FC<SmartOrderClassifierModalProps>
   };
 
   const sampleQueries = [
+    'Preciso de 2 ajudantes para descarregar caminhão de caixas amanhã',
+    'Panfletagem de material para campanha eleitoral no Centro',
+    'Pedreiro para construir muro de arrimo com bloco e reboco',
+    'Instalação de box blindex e portas de alumínio sob medida',
     'Minha tomada está esquentando e com cheiro estranho',
     'Preciso de uma diarista para faxina pesada no apartamento',
-    'Chuveiro queimou e o disjuntor tá desarmando sozinho',
-    'Montador para montar um guarda-roupas de casal',
-    'Preciso de banho e tosa a domicílio para meu cachorro labrador',
-    'O ar-condicionado parou de gelar e faz barulho'
+    'Montador para montar um guarda-roupas de casal'
   ];
 
   return (

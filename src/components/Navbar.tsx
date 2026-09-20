@@ -35,6 +35,7 @@ interface NavbarProps {
   onResetData: () => void;
   onOpenRegisterPro: () => void;
   onOpenRegisterClient: () => void;
+  onOpenRegisterBusiness?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -51,7 +52,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAIHelper,
   onResetData,
   onOpenRegisterPro,
-  onOpenRegisterClient
+  onOpenRegisterClient,
+  onOpenRegisterBusiness
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
@@ -450,6 +452,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </button>
 
+            {/* Anunciar Empresa CTA */}
+            {onOpenRegisterBusiness && (
+              <button
+                id="btn-nav-register-biz-desktop"
+                onClick={onOpenRegisterBusiness}
+                className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-xl border border-amber-300/90 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-xs font-black transition cursor-pointer shadow-xs"
+                title="Anuncie sua loja ou comércio pagando taxa via PIX"
+              >
+                <Store className="w-3.5 h-3.5" />
+                <span>Anunciar Loja (PIX)</span>
+              </button>
+            )}
+
             {/* Quero Trabalhar CTA */}
             <button
               id="btn-nav-register-pro-desktop"
@@ -533,7 +548,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>Cadastre-se como Prestador</span>
             </div>
             <span className="text-[10px] bg-slate-950 text-amber-300 px-2 py-0.5 rounded-full font-black">
-              6M GRÁTIS
+              10 CRÉDITOS R$ 9,99
             </span>
           </button>
 
@@ -604,6 +619,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           )}
 
           <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
+            <PWAInstallButton />
+
+            {onOpenRegisterBusiness && (
+              <button
+                onClick={() => { onOpenRegisterBusiness(); setMobileMenuOpen(false); }}
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 text-white text-sm font-bold text-center shadow-xs flex items-center justify-center gap-2"
+              >
+                <Store className="w-4 h-4" />
+                <span>Anunciar Empresa / Loja (PIX)</span>
+              </button>
+            )}
+
             <button
               onClick={() => { onOpenNewRequest(); setMobileMenuOpen(false); }}
               className="w-full py-2.5 rounded-xl bg-teal-600 text-white text-sm font-semibold text-center shadow-xs"
