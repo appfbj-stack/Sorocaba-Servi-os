@@ -37,7 +37,7 @@ export const PWAInstallButton: React.FC<{ compact?: boolean }> = ({ compact = fa
           ? "flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-teal-600 text-white hover:bg-teal-700 transition shadow-xs cursor-pointer"
           : "flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-lg bg-teal-600 text-white hover:bg-teal-700 transition shadow-xs cursor-pointer"
         }
-        title="Instalar Sorocaba Serviços no seu celular ou computador"
+        title="Instalar Kairos Serviços no seu celular ou computador"
       >
         <Download className="w-3.5 h-3.5" />
         <span>Instalar App</span>
@@ -78,7 +78,7 @@ export const PWAInstallButton: React.FC<{ compact?: boolean }> = ({ compact = fa
                 </button>
               </div>
               <p className="text-sm text-slate-600 space-y-2 mb-5">
-                Para ter o <strong>Sorocaba Serviços</strong> como aplicativo nativo:
+                Para ter o <strong>Kairos Serviços</strong> como aplicativo nativo:
                 <br /><br />
                 1. Toque no botão <strong>Compartilhar</strong> (ícone com seta para cima) na barra do Safari.<br />
                 2. Role para baixo e selecione <strong>Adicionar à Tela de Início</strong>.<br />
@@ -108,7 +108,7 @@ export const PWAInstallButton: React.FC<{ compact?: boolean }> = ({ compact = fa
           ? "flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-teal-200 bg-teal-50 text-teal-800 hover:bg-teal-100 transition cursor-pointer"
           : "flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-lg border border-teal-200 bg-teal-50 text-teal-800 hover:bg-teal-100 transition cursor-pointer"
         }
-        title="Instalar Sorocaba Serviços no seu celular ou computador"
+        title="Instalar Kairos Serviços no seu celular ou computador"
       >
         <Smartphone className="w-3.5 h-3.5 text-teal-600" />
         <span>Instalar Aplicativo</span>
@@ -133,7 +133,7 @@ export const PWAInstallButton: React.FC<{ compact?: boolean }> = ({ compact = fa
             </div>
             <div className="text-xs sm:text-sm text-slate-600 space-y-3 mb-5 leading-relaxed">
               <p>
-                O <strong>Sorocaba Serviços</strong> é um Progressive Web App (PWA) e pode ser instalado diretamente no seu celular ou computador sem ocupar espaço da loja:
+                O <strong>Kairos Serviços</strong> é um Progressive Web App (PWA) e pode ser instalado diretamente no seu celular ou computador sem ocupar espaço da loja:
               </p>
               <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1.5">
                 <p><strong>• No Chrome / Edge (Desktop/Android):</strong> Clique no ícone de instalação <Download className="w-3.5 h-3.5 inline text-teal-600" /> na barra de endereços ou no menu (três pontos) &gt; <em>"Instalar aplicativo"</em>.</p>

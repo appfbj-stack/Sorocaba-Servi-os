@@ -33,7 +33,7 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
   onViewProfile,
   onRequestService
 }) => {
-  const whatsappMessage = `Olá ${professional.nome.split(' ')[0]}, encontrei seu perfil no Sorocaba Serviços e gostaria de solicitar um orçamento.`;
+  const whatsappMessage = `Olá ${professional.nome.split(' ')[0]}, encontrei seu perfil no Kairos Serviços e gostaria de solicitar um orçamento.`;
   const whatsappUrl = StorageService.buildWhatsAppUrl(professional.whatsapp, whatsappMessage);
 
   return (

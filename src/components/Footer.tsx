@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, ShieldCheck, Heart, Sparkles } from 'lucide-react';
+import { MapPin, ShieldCheck, Heart, Sparkles, Hourglass } from 'lucide-react';
 import { City } from '../types.ts';
 
 interface FooterProps {
@@ -23,15 +23,15 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Brand Col */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center text-white font-black text-base">
-              S★
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-teal-800 to-teal-600 flex items-center justify-center text-amber-300 shadow-sm">
+              <Hourglass className="w-4 h-4 text-amber-300" />
             </div>
             <span className="text-white font-extrabold text-base tracking-tight">
-              Sorocaba<span className="text-teal-400">Serviços</span>
+              Kairos<span className="text-teal-400">Serviços</span>
             </span>
           </div>
           <p className="text-slate-400 leading-relaxed">
-            O marketplace de serviços e comércios de bairro feito para quem vive em Sorocaba/SP e cidades vizinhas.
+            Kairos Serviços — Marketplace & Comércio Local conectando moradores de Sorocaba/SP e região aos melhores profissionais e lojas de bairro.
           </p>
           <div className="flex items-center gap-1 text-teal-400 font-semibold">
             <MapPin className="w-3.5 h-3.5" />
@@ -130,7 +130,7 @@ export const Footer: React.FC<FooterProps> = ({
 
       <div className="max-w-7xl mx-auto pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
         <div>
-          © {new Date().getFullYear()} Sorocaba Serviços. Plataforma MVP Local de Serviços e Comércios.
+          © {new Date().getFullYear()} Kairos Serviços - Marketplace & Comércio Local. Conectando você aos melhores negócios e profissionais.
         </div>
         <div className="flex items-center gap-1 text-slate-400">
           <span>Feito com dedicação para Sorocaba e Região Metropolitana</span>

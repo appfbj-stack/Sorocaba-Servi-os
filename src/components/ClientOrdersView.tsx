@@ -228,7 +228,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                   ) : (
                     <div className="space-y-3">
                       {selectedRequest.propostas.map((prop) => {
-                        const whatsappMsg = `Olá ${prop.profissionalNome.split(' ')[0]}, vi sua proposta no valor de R$ ${prop.valorEstimado || 'a combinar'} para o pedido #${selectedRequest.id} no Sorocaba Serviços. Podemos combinar os detalhes?`;
+                        const whatsappMsg = `Olá ${prop.profissionalNome.split(' ')[0]}, vi sua proposta no valor de R$ ${prop.valorEstimado || 'a combinar'} para o pedido #${selectedRequest.id} no Kairos Serviços. Podemos combinar os detalhes?`;
                         const whatsappLink = StorageService.buildWhatsAppUrl(prop.profissionalWhatsapp, whatsappMsg);
 
                         return (

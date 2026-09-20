@@ -29,7 +29,7 @@ export const BusinessProfileModal: React.FC<BusinessProfileModalProps> = ({
 }) => {
   if (!business) return null;
 
-  const whatsappMessage = `Olá! Encontrei o perfil da ${business.nome} no Sorocaba Serviços e gostaria de mais informações.`;
+  const whatsappMessage = `Olá! Encontrei o perfil da ${business.nome} no Kairos Serviços e gostaria de mais informações.`;
   const whatsappUrl = StorageService.buildWhatsAppUrl(business.whatsapp, whatsappMessage);
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.endereco)}`;
 

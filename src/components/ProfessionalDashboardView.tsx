@@ -316,7 +316,7 @@ export const ProfessionalDashboardView: React.FC<ProfessionalDashboardViewProps>
                 const alreadySent = req.propostas.some(p => p.profissionalId === professional.id);
                 const isUnlocked = pedidosDesbloqueados.includes(req.id) || alreadySent;
 
-                const whatsAppDirectMsg = `Olá ${req.clienteNome}! Vi seu pedido de "${req.servico}" em Sorocaba pelo portal Sorocaba Serviços e tenho disponibilidade para te atender. Podemos conversar?`;
+                const whatsAppDirectMsg = `Olá ${req.clienteNome}! Vi seu pedido de "${req.servico}" em Sorocaba pelo portal Kairos Serviços e tenho disponibilidade para te atender. Podemos conversar?`;
                 const whatsAppUrl = StorageService.buildWhatsAppUrl(req.clienteWhatsapp, whatsAppDirectMsg);
 
                 return (

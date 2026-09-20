@@ -28,7 +28,7 @@ export const BusinessCard: React.FC<BusinessCardProps> = ({
   onToggleFavorite,
   onViewProfile
 }) => {
-  const whatsappMessage = `Olá! Encontrei a ${business.nome} no Sorocaba Serviços e gostaria de mais informações.`;
+  const whatsappMessage = `Olá! Encontrei a ${business.nome} no Kairos Serviços e gostaria de mais informações.`;
   const whatsappUrl = StorageService.buildWhatsAppUrl(business.whatsapp, whatsappMessage);
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.endereco)}`;
 

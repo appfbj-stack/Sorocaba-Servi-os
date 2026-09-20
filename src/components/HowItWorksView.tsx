@@ -29,10 +29,10 @@ export const HowItWorksView: React.FC<{
           <span>Marketplace Local e Conexão Direta</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          Como Funciona o Sorocaba Serviços
+          Como Funciona o Kairos Serviços
         </h1>
         <p className="text-base text-slate-600 leading-relaxed">
-          Nossa missão é aproximar moradores de Sorocaba dos melhores profissionais autônomos e comércios de bairro com agilidade, transparência e sem intermediários abusivos.
+          Nossa missão é aproximar moradores dos melhores profissionais autônomos e comércios de bairro com agilidade, transparência e sem intermediários abusivos.
         </p>
       </div>
 

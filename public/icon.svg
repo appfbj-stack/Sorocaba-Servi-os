@@ -1,29 +1,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0f766e" />
-      <stop offset="100%" stop-color="#0d9488" />
+      <stop offset="100%" stop-color="#115e59" />
     </linearGradient>
-    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f59e0b" />
-      <stop offset="100%" stop-color="#fbbf24" />
+    <linearGradient id="sandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
     </linearGradient>
   </defs>
-  <!-- Background rounded rect -->
-  <rect width="512" height="512" rx="112" fill="url(#grad)" />
-  
-  <!-- Subtle inner glow / ring -->
-  <rect x="16" y="16" width="480" height="480" rx="96" fill="none" stroke="#ffffff" stroke-width="4" stroke-opacity="0.15" />
 
-  <!-- Pin & Service icon combination -->
-  <g transform="translate(106, 80)">
-    <!-- Map Pin shape -->
-    <path d="M150 20 C75 20 15 80 15 155 C15 245 150 360 150 360 C150 360 285 245 285 155 C285 80 225 20 150 20 Z" fill="#ffffff" />
-    <!-- Center circle cutout -->
-    <circle cx="150" cy="155" r="70" fill="#0f766e" />
-    <!-- Service Wrench / Spark symbol -->
-    <path d="M135 115 L165 115 L165 140 L190 140 L190 170 L165 170 L165 195 L135 195 L135 170 L110 170 L110 140 L135 140 Z" fill="url(#accent)" rx="6" />
-    <!-- Small star / checkmark -->
-    <polygon points="150,132 155,145 168,145 157,153 161,166 150,158 139,166 143,153 132,145 145,145" fill="#ffffff" />
+  <!-- Background rounded rect -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  <rect x="18" y="18" width="476" height="476" rx="94" fill="none" stroke="#ffffff" stroke-width="4" stroke-opacity="0.15" />
+
+  <!-- Hourglass / Relógio de Areia -->
+  <g>
+    <!-- Top and Bottom Plates -->
+    <rect x="140" y="96" width="232" height="26" rx="13" fill="#ffffff" />
+    <rect x="140" y="390" width="232" height="26" rx="13" fill="#ffffff" />
+
+    <!-- Top Sand (Amber Gradient) -->
+    <path d="M 180 140 L 332 140 C 325 185 285 225 264 242 L 248 242 C 227 225 187 185 180 140 Z" fill="url(#sandGrad)" />
+
+    <!-- Falling Sand Trickle -->
+    <rect x="253" y="240" width="6" height="75" rx="3" fill="#fde047" />
+
+    <!-- Bottom Sand Mound -->
+    <path d="M 174 380 C 185 320 225 295 256 295 C 287 295 327 320 338 380 Z" fill="url(#sandGrad)" />
+
+    <!-- Glass Contour Outline -->
+    <path d="M 166 122 C 166 215, 238 238, 246 256 C 238 274, 166 297, 166 390 L 346 390 C 346 297, 274 274, 266 256 C 274 238, 346 215, 346 122 Z"
+          fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Center Waist Ring Detail -->
+    <rect x="240" y="250" width="32" height="12" rx="6" fill="#ffffff" />
+
+    <!-- Sparkle Star (Kairos - The Right Moment) -->
+    <path d="M 335 180 Q 335 198 317 198 Q 335 198 335 216 Q 335 198 353 198 Q 335 198 335 180 Z" fill="#fde047" />
   </g>
 </svg>

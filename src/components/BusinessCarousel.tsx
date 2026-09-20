@@ -152,7 +152,7 @@ export const BusinessCarousel: React.FC<BusinessCarouselProps> = ({
         }}
       >
         {visibleItems.map(({ item: biz, index: itemIndex }, displayIdx) => {
-          const whatsappMsg = `Olá! Vi a propaganda da ${biz.nome} no Sorocaba Serviços e gostaria de saber mais informações e valores.`;
+          const whatsappMsg = `Olá! Vi a propaganda da ${biz.nome} no Kairos Serviços e gostaria de saber mais informações e valores.`;
           const whatsappUrl = StorageService.buildWhatsAppUrl(biz.whatsapp, whatsappMsg);
 
           const handleWhatsApp = (e: React.MouseEvent) => {

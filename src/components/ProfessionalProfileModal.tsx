@@ -36,7 +36,7 @@ export const ProfessionalProfileModal: React.FC<ProfessionalProfileModalProps> =
 }) => {
   if (!professional) return null;
 
-  const whatsappMessage = `Olá ${professional.nome.split(' ')[0]}, encontrei seu perfil no Sorocaba Serviços e gostaria de agendar uma visita/orçamento.`;
+  const whatsappMessage = `Olá ${professional.nome.split(' ')[0]}, encontrei seu perfil no Kairos Serviços e gostaria de agendar uma visita/orçamento.`;
   const whatsappUrl = StorageService.buildWhatsAppUrl(professional.whatsapp, whatsappMessage);
 
   return (

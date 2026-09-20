@@ -1,6 +1,6 @@
 {
-  "name": "Sorocaba Serviços - Marketplace Local",
-  "description": "Plataforma local de serviços para Sorocaba/SP e região, conectando clientes, profissionais autônomos e empresas locais com WhatsApp direto.",
+  "name": "Kairos Serviços - Marketplace & Comércio Local",
+  "description": "Plataforma Kairos Serviços - Marketplace & Comércio Local conectando clientes, profissionais autônomos e empresas locais com WhatsApp direto.",
   "requestFramePermissions": ["geolocation"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

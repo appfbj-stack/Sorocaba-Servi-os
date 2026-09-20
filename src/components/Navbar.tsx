@@ -14,7 +14,8 @@ import {
   PlusCircle,
   RotateCcw,
   Sparkles,
-  Gift
+  Gift,
+  Hourglass
 } from 'lucide-react';
 import { User as UserType, City, UserRole } from '../types.ts';
 import { StorageService } from '../services/storage.ts';
@@ -94,8 +95,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     } else {
       newUser = {
         id: 'usr-admin-1',
-        nome: 'Administrador Sorocaba Serviços',
-        email: 'admin@sorocabaservicos.com.br',
+        nome: 'Administrador Kairos Serviços',
+        email: 'admin@kairosservicos.com.br',
         telefone: '(15) 3000-0000',
         role: 'admin',
         cidadeId: 'cid-sorocaba',
@@ -300,16 +301,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => setCurrentTab('home')}
             className="flex items-center gap-2.5 cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-700 to-teal-500 flex items-center justify-center text-white shadow-md shadow-teal-700/20 group-hover:scale-105 transition">
-              <span className="font-extrabold text-xl tracking-tighter">S</span>
-              <span className="font-bold text-amber-300 text-xs">★</span>
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-800 via-teal-700 to-teal-600 flex items-center justify-center shadow-md shadow-teal-700/20 group-hover:scale-105 transition relative">
+              <Hourglass className="w-5 h-5 text-amber-300 drop-shadow-xs" />
             </div>
             <div>
               <div className="font-extrabold text-slate-900 text-lg leading-tight tracking-tight flex items-center gap-1">
-                <span>Sorocaba</span>
+                <span>Kairos</span>
                 <span className="text-teal-600 font-black">Serviços</span>
               </div>
-              <div className="text-[11px] font-medium text-slate-500 leading-none">
+              <div className="text-[11px] font-semibold text-slate-500 leading-none">
                 Marketplace & Comércio Local
               </div>
             </div>

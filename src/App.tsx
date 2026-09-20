@@ -157,7 +157,7 @@ export default function App() {
   };
 
   const handleResetData = () => {
-    if (window.confirm('Deseja restaurar os dados de demonstração da plataforma Sorocaba Serviços?')) {
+    if (window.confirm('Deseja restaurar os dados de demonstração da plataforma Kairos Serviços?')) {
       StorageService.resetDatabase();
       refreshAllState();
       alert('Dados de demonstração restaurados com sucesso!');
