@@ -27,7 +27,7 @@ export const updateUserSchema = z.object({
   telefone: z.string().min(8).max(20).optional(),
   cityId: z.string().uuid().optional(),
   neighborhoodId: z.string().uuid().optional(),
-  avatarUrl: z.url().optional(),
+  avatarUrl: z.string().url().optional(),
 });
 
 // ===== Cities / Categories / Listings =====
@@ -72,7 +72,7 @@ export const createListingSchema = z.object({
   endereco: z.string().max(300).optional(),
   latitude: z.number().min(-90).max(90).optional(),
   longitude: z.number().min(-180).max(180).optional(),
-  site: z.url().optional(),
+  site: z.string().url().optional(),
   instagram: z.string().max(80).optional(),
   servicos: z.array(z.string()).default([]),
 });
