@@ -6,3 +6,12 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Server-specific
+server/dist/
+server/.env
+server/drizzle/meta/
+
+# IDE
+.vscode/
+.idea/

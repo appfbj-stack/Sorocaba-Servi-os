@@ -1,0 +1,101 @@
+# ===== Kairós Serviços — stack de produção (Dokploy) =====
+# 3 serviços isolados:
+#   - api   (porta 3051) — backend Express
+#   - web   (porta 3052) — frontend Vite servido via preview
+#   - pg    (Postgres 16 Alpine, porta interna 5432, SEM expor no host)
+#
+# Domínio público: https://servicos.fbautomacao.space
+# Caddy (no host) roteia:
+#   /api/*  → 127.0.0.1:3051
+#   /       → 127.0.0.1:3052
+#
+# Banco: volume Docker nomeado (backup com `docker run --rm -v kairos-servicos-pg-data:/d postgres:16-alpine pg_dump ...`)
+# Tudo em .env, sem segredos hardcoded.
+
+services:
+  pg:
+    image: postgres:16-alpine
+    container_name: kairos-servicos-pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kairos_servicos
+      POSTGRES_PASSWORD: ${KAIROS_SERVICOS_DB_PASS}
+      POSTGRES_DB: kairos_servicos
+    volumes:
+      - kairos-servicos-pg-data:/var/lib/postgresql/data
+    networks:
+      - kairos-servicos-net
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U kairos_servicos -d kairos_servicos']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: kairos-servicos-api
+    restart: unless-stopped
+    depends_on:
+      pg:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3051
+      DATABASE_URL: postgres://kairos_servicos:${KAIROS_SERVICOS_DB_PASS}@pg:5432/kairos_servicos
+      JWT_SECRET: ${KAIROS_SERVICOS_JWT_SECRET}
+      CORS_ORIGIN: https://servicos.fbautomacao.space
+      LOG_LEVEL: info
+      PIX_KEY: ${PIX_KEY:-02598018796}
+      PIX_KEY_TYPE: ${PIX_KEY_TYPE:-cpf}
+    ports:
+      - "127.0.0.1:3051:3051"
+    networks:
+      - kairos-servicos-net
+      - dokploy-network
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://localhost:3051/health']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      args:
+        VITE_API_URL: https://servicos.fbautomacao.space/api
+    container_name: kairos-servicos-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:3052:3000"
+    networks:
+      - dokploy-network
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+networks:
+  kairos-servicos-net:
+    driver: overlay
+    name: kairos-servicos-net
+  dokploy-network:
+    external: true
+    name: dokploy-network
+
+volumes:
+  kairos-servicos-pg-data:
+    name: kairos-servicos-pg-data
