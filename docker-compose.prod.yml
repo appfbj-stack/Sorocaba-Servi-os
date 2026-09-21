@@ -140,7 +140,7 @@ services:
 
 networks:
   kairos-servicos-net:
-    driver: overlay
+    external: true
     name: kairos-servicos-net
   dokploy-network:
     external: true
