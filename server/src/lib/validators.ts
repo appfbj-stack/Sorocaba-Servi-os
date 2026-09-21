@@ -121,7 +121,7 @@ export const createRequestSchema = z.object({
   descricao: z.string().min(2).max(2000),
   cityId: z.string().uuid(),
   neighborhoodId: z.string().uuid().optional(),
-  dataDesejada: z.iso.datetime().optional(), // ISO 8601
+  dataDesejada: z.string().datetime().optional(), // ISO 8601
   urgencia: urgenciaSchema.default('normal'),
   horarioPreferencia: horarioPrefSchema.default('qualquer'),
   clienteNome: z.string().min(2).max(200).optional(), // se não tiver user, anônimo
