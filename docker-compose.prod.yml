@@ -1,18 +1,59 @@
 # ===== Kairós Serviços — stack de produção (Dokploy) =====
-# 3 serviços isolados:
-#   - api   (porta 3051) — backend Express
-#   - web   (porta 3052) — frontend Vite servido via preview
-#   - pg    (Postgres 16 Alpine, porta interna 5432, SEM expor no host)
+# 5 serviços isolados:
+#   - minio       (porta 9000 S3 + 9001 console, storage de imagens)
+#   - minio-setup (init container: cria bucket + policy no primeiro boot)
+#   - api         (porta 3051) — backend Express
+#   - web         (porta 3052) — frontend Vite servido via preview
+#   - pg          (Postgres 16 Alpine, porta interna 5432, SEM expor no host)
 #
 # Domínio público: https://servicos.fbautomacao.space
 # Caddy (no host) roteia:
-#   /api/*  → 127.0.0.1:3051
-#   /       → 127.0.0.1:3052
+#   /api/*     → 127.0.0.1:3051
+#   /          → 127.0.0.1:3052
+#   /uploads/* → 127.0.0.1:9000  (opcional, pra servir direto sem CDN)
 #
-# Banco: volume Docker nomeado (backup com `docker run --rm -v kairos-servicos-pg-data:/d postgres:16-alpine pg_dump ...`)
 # Tudo em .env, sem segredos hardcoded.
 
 services:
+  minio:
+    image: minio/minio:latest
+    container_name: kairos-servicos-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${KAIROS_SERVICOS_MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${KAIROS_SERVICOS_MINIO_ROOT_PASSWORD}
+    volumes:
+      - kairos-servicos-minio-data:/data
+    networks:
+      - kairos-servicos-net
+    healthcheck:
+      test: ['CMD', 'mc', 'ready', 'local']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+
+  minio-setup:
+    image: minio/mc:latest
+    container_name: kairos-servicos-minio-setup
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - kairos-servicos-net
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 '${KAIROS_SERVICOS_MINIO_ROOT_USER}' '${KAIROS_SERVICOS_MINIO_ROOT_PASSWORD}' &&
+      mc mb --ignore-existing local/${KAIROS_SERVICOS_MINIO_BUCKET} &&
+      mc anonymous set download local/${KAIROS_SERVICOS_MINIO_BUCKET} &&
+      echo '✓ MinIO bucket ${KAIROS_SERVICOS_MINIO_BUCKET} criado com policy pública de leitura'
+      "
+    restart: "no"
+
   pg:
     image: postgres:16-alpine
     container_name: kairos-servicos-pg
@@ -44,6 +85,8 @@ services:
     depends_on:
       pg:
         condition: service_healthy
+      minio:
+        condition: service_healthy
     environment:
       NODE_ENV: production
       PORT: 3051
@@ -53,6 +96,13 @@ services:
       LOG_LEVEL: info
       PIX_KEY: ${PIX_KEY:-02598018796}
       PIX_KEY_TYPE: ${PIX_KEY_TYPE:-cpf}
+      # MinIO / S3
+      S3_ENDPOINT: http://minio:9000
+      S3_REGION: us-east-1
+      S3_BUCKET: ${KAIROS_SERVICOS_MINIO_BUCKET}
+      S3_ACCESS_KEY: ${KAIROS_SERVICOS_MINIO_ROOT_USER}
+      S3_SECRET_KEY: ${KAIROS_SERVICOS_MINIO_ROOT_PASSWORD}
+      S3_PUBLIC_URL: ${KAIROS_SERVICOS_MINIO_PUBLIC_URL:-https://servicos.fbautomacao.space/uploads}
     ports:
       - "127.0.0.1:3051:3051"
     networks:
@@ -99,3 +149,5 @@ networks:
 volumes:
   kairos-servicos-pg-data:
     name: kairos-servicos-pg-data
+  kairos-servicos-minio-data:
+    name: kairos-servicos-minio-data

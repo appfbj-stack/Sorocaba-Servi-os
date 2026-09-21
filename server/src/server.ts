@@ -13,6 +13,7 @@ import compression from 'compression';
 import pinoHttp from 'pino-http';
 import { logger } from './lib/logger.ts';
 import { pool } from './db/client.ts';
+import { s3, BUCKET } from './services/storage.ts';
 
 const PORT = Number(process.env.PORT ?? 3051);
 const NODE_ENV = process.env.NODE_ENV ?? 'development';
@@ -32,27 +33,44 @@ app.use(pinoHttp({ logger }));
 
 // ===== Health check =====
 app.get('/health', async (_req: Request, res: Response) => {
+  const checks = {
+    db: { ok: false, error: undefined as string | undefined },
+    storage: { ok: false, error: undefined as string | undefined },
+  };
+
+  // Postgres
   try {
     const { rows } = await pool.query('SELECT now() AS now, version() AS pg_version');
-    return res.json({
-      status: 'ok',
-      env: NODE_ENV,
-      uptime: Math.round(process.uptime()),
-      db: {
-        ok: true,
-        now: rows[0]?.now,
-        version: rows[0]?.pg_version,
-      },
-      service: 'kairos-servicos-api',
-      version: '0.1.0',
-    });
+    checks.db = {
+      ok: true,
+      error: undefined,
+      ...(rows[0] as { now?: string; pg_version?: string }),
+    };
   } catch (err) {
-    logger.error({ err }, 'health check falhou');
-    return res.status(503).json({
-      status: 'degraded',
-      db: { ok: false, error: String(err) },
-    });
+    checks.db = { ok: false, error: String(err) };
   }
+
+  // MinIO/S3
+  try {
+    const { HeadBucketCommand } = await import('@aws-sdk/client-s3');
+    await s3.send(new HeadBucketCommand({ Bucket: BUCKET }));
+    checks.storage = { ok: true, error: undefined };
+  } catch (err) {
+    checks.storage = { ok: false, error: String(err) };
+  }
+
+  const allOk = checks.db.ok && checks.storage.ok;
+  return res.status(allOk ? 200 : 503).json({
+    status: allOk ? 'ok' : 'degraded',
+    env: NODE_ENV,
+    uptime: Math.round(process.uptime()),
+    service: 'kairos-servicos-api',
+    version: '0.1.0',
+    checks: {
+      db: { ok: checks.db.ok, ...(checks.db.error ? { error: checks.db.error } : {}) },
+      storage: { ok: checks.storage.ok, ...(checks.storage.error ? { error: checks.storage.error } : {}) },
+    },
+  });
 });
 
 // ===== Rota raiz =====
