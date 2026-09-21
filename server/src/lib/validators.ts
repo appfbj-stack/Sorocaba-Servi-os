@@ -141,3 +141,48 @@ export const createProposalSchema = z.object({
 
 export type CreateRequestInput = z.infer<typeof createRequestSchema>;
 export type CreateProposalInput = z.infer<typeof createProposalSchema>;
+
+// ===== PIX =====
+
+export const pixTxTypeSchema = z.enum(['recarga_creditos', 'mensalidade_lojista']);
+
+export const createPixRechargeSchema = z.object({
+  tipo: pixTxTypeSchema.default('recarga_creditos'),
+});
+
+export type CreatePixRechargeInput = z.infer<typeof createPixRechargeSchema>;
+
+// ===== Admin =====
+
+export const adminUpdateListingStatusSchema = z.object({
+  status: z.enum(['pendente', 'ativo', 'bloqueado']),
+  motivo: z.string().max(500).optional(),
+});
+
+export type AdminUpdateListingStatusInput = z.infer<typeof adminUpdateListingStatusSchema>;
+
+// ===== Settings =====
+
+export const settingsKeys = [
+  'monetization_enabled',
+  'lojista_price_monthly',
+  'lojista_free_months',
+  'profissional_free_credits',
+  'profissional_free_credits_validity_days',
+  'credit_pack_qty',
+  'credit_pack_price',
+  'credit_pack_validity_days',
+  'pix_key',
+  'pix_key_type',
+  'promo_text',
+  'promo_active',
+] as const;
+
+export type SettingsKey = typeof settingsKeys[number];
+
+export const updateSettingSchema = z.object({
+  key: z.string().min(1).max(80),
+  value: z.unknown(),
+});
+
+export type UpdateSettingInput = z.infer<typeof updateSettingSchema>;
