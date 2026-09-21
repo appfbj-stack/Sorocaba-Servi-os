@@ -9,7 +9,7 @@ export const userRoleSchema = z.enum(['cliente', 'profissional', 'empresa', 'adm
 
 export const registerSchema = z.object({
   nome: z.string().min(2).max(200),
-  email: z.email().max(200),
+  email: z.string().email().max(200),
   password: z.string().min(8).max(100),
   telefone: z.string().min(8).max(20).optional(),
   role: userRoleSchema.default('cliente'),
@@ -18,7 +18,7 @@ export const registerSchema = z.object({
 });
 
 export const loginSchema = z.object({
-  email: z.email(),
+  email: z.string().email(),
   password: z.string().min(1),
 });
 
@@ -66,7 +66,7 @@ export const createListingSchema = z.object({
   descricao: z.string().max(2000).optional(),
   whatsapp: z.string().min(8).max(20),
   telefone: z.string().min(8).max(20).optional(),
-  emailPublico: z.email().optional(),
+  emailPublico: z.string().email().optional(),
   cityId: z.string().uuid(),
   neighborhoodId: z.string().uuid().optional(),
   endereco: z.string().max(300).optional(),
