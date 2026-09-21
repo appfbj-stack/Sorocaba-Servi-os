@@ -23,4 +23,4 @@ COPY --from=build /app/dist ./dist
 RUN npm install --omit=dev --no-audit --no-fund --legacy-peer-deps
 EXPOSE 3000
 USER node
-CMD ["npx", "vite", "preview", "--port", "3000", "--host", "0.0.0.0", "--allowed-hosts", "all"]
+CMD ["npx", "vite", "preview", "--port", "3000", "--host", "0.0.0.0"]
