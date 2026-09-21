@@ -1,34 +1,24 @@
 # ===== Kairós Serviços API =====
-# Multi-stage build pra imagem final leve
+# Roda via tsx direto (sem step de build separado — evita problemas de TS emit)
 
 FROM node:22-alpine AS base
 RUN apk add --no-cache openssl
 WORKDIR /app
 
-# ---- deps stage ----
-FROM base AS deps
+# ---- runtime ----
+FROM base AS runtime
+ENV NODE_ENV=production
 COPY package.json package.json
-# Se tivesse lockfile separado pra server (pnpm/bun):
-# COPY package.json ./
-RUN npm install --omit=dev
-
-# ---- build stage ----
-FROM base AS build
-COPY package.json package.json
-RUN npm install
 COPY tsconfig.json tsconfig.json
 COPY drizzle.config.ts drizzle.config.ts
 COPY src src
-RUN npm run build
 
-# ---- runtime stage ----
-FROM base AS runtime
-ENV NODE_ENV=production
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/drizzle ./drizzle
-COPY package.json package.json
+# Instala deps com tsx incluso (não precisa buildar)
+RUN npm install --no-audit --no-fund --legacy-peer-deps
+
+# Cria pasta pra migrations geradas
+RUN mkdir -p drizzle
 
 EXPOSE 3051
 USER node
-CMD ["node", "dist/server.js"]
+CMD ["npx", "tsx", "src/server.ts"]
