@@ -60,7 +60,6 @@ const DEFAULT_SETTINGS: Array<{ key: string; value: unknown; descricao: string }
   { key: 'pix_key_type', value: process.env.PIX_KEY_TYPE ?? 'cpf', descricao: 'Tipo da chave PIX' },
   { key: 'promo_text', value: '', descricao: 'Texto do banner de promoção' },
   { key: 'promo_active', value: false, descricao: 'Liga/desliga banner de promoção' },
-  { key: 'monetization_enabled_at', value: null, descricao: 'Timestamp em que monetização foi ativada (auditoria)' },
 ];
 
 function slugify(s: string): string {
