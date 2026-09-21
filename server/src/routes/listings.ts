@@ -124,11 +124,23 @@ router.post(
 
     const data = createListingSchema.parse(req.body);
 
+    // Profissional recebe 10 créditos grátis (validade 6 meses) ao criar listing.
+    // Empresa não recebe (paga destaque à parte).
+    const isProfissional = req.user!.role === 'profissional';
+    const creditos = isProfissional ? 10 : 0;
+    const creditosExpiraEm = isProfissional
+      ? new Date(Date.now() + 180 * 24 * 60 * 60 * 1000) // 6 meses
+      : null;
+
     const [created] = await db.insert(listings).values({
       ...data,
       userId: req.user!.id,
       tipo: req.user!.role as 'profissional' | 'empresa',
       status: 'pendente', // admin aprova
+      creditos,
+      creditosExpiraEm,
+      planoAtual: isProfissional ? 'gratuito_6_meses' : null,
+      planoStatus: isProfissional ? 'ativo' : null,
     }).returning();
 
     return res.status(201).json({ listing: created });
