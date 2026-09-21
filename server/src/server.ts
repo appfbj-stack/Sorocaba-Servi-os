@@ -19,6 +19,9 @@ import { attachUser } from './middleware/auth.ts';
 import { errorHandler } from './middleware/error.ts';
 import authRouter from './routes/auth.ts';
 import usersRouter from './routes/users.ts';
+import citiesRouter from './routes/cities.ts';
+import categoriesRouter from './routes/categories.ts';
+import listingsRouter from './routes/listings.ts';
 
 const PORT = Number(process.env.PORT ?? 3051);
 const NODE_ENV = process.env.NODE_ENV ?? 'development';
@@ -80,7 +83,7 @@ app.get('/health', async (_req: Request, res: Response) => {
     env: NODE_ENV,
     uptime: Math.round(process.uptime()),
     service: 'kairos-servicos-api',
-    version: '0.2.0',
+    version: '0.3.0',
     checks: {
       db: { ok: checks.db.ok, ...(checks.db.error ? { error: checks.db.error } : {}) },
       storage: { ok: checks.storage.ok, ...(checks.storage.error ? { error: checks.storage.error } : {}) },
@@ -92,11 +95,14 @@ app.get('/health', async (_req: Request, res: Response) => {
 app.get('/', (_req: Request, res: Response) => {
   res.json({
     name: 'Kairós Serviços API',
-    version: '0.2.0',
+    version: '0.3.0',
     docs: '/health',
     endpoints: {
       auth: '/api/auth',
       users: '/api/users',
+      cities: '/api/cities',
+      categories: '/api/categories',
+      listings: '/api/listings',
     },
   });
 });
@@ -104,6 +110,9 @@ app.get('/', (_req: Request, res: Response) => {
 // ===== Rotas da API =====
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/cities', citiesRouter);
+app.use('/api/categories', categoriesRouter);
+app.use('/api/listings', listingsRouter);
 
 // ===== 404 =====
 app.use((req: Request, res: Response) => {
