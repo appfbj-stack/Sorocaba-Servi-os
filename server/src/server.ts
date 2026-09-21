@@ -1,8 +1,7 @@
 /**
  * Kairós Serviços — API entry point
  *
- * Fase 1: esqueleto mínimo com /health e middlewares base.
- * Rotas virão nas próximas fases.
+ * Fase 2: Auth (JWT cookie) + Users. Rotas virão nas próximas fases.
  */
 
 import 'dotenv/config';
@@ -10,15 +9,24 @@ import express, { type Request, type Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 import pinoHttp from 'pino-http';
+import rateLimit from 'express-rate-limit';
 import { logger } from './lib/logger.ts';
 import { pool } from './db/client.ts';
 import { s3, BUCKET } from './services/storage.ts';
+import { attachUser } from './middleware/auth.ts';
+import { errorHandler } from './middleware/error.ts';
+import authRouter from './routes/auth.ts';
+import usersRouter from './routes/users.ts';
 
 const PORT = Number(process.env.PORT ?? 3051);
 const NODE_ENV = process.env.NODE_ENV ?? 'development';
 
 const app = express();
+
+// ===== Confiança no proxy (Caddy/Dokploy) =====
+app.set('trust proxy', 1);
 
 // ===== Middlewares globais =====
 app.use(helmet());
@@ -29,7 +37,19 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(pinoHttp({ logger }));
+app.use(attachUser);
+
+// ===== Rate limiter global =====
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'rate_limited', message: 'Muitas requisições, tente em alguns minutos' },
+});
+app.use('/api', limiter);
 
 // ===== Health check =====
 app.get('/health', async (_req: Request, res: Response) => {
@@ -38,19 +58,14 @@ app.get('/health', async (_req: Request, res: Response) => {
     storage: { ok: false, error: undefined as string | undefined },
   };
 
-  // Postgres
   try {
     const { rows } = await pool.query('SELECT now() AS now, version() AS pg_version');
-    checks.db = {
-      ok: true,
-      error: undefined,
-      ...(rows[0] as { now?: string; pg_version?: string }),
-    };
+    const row = rows[0] as { now?: string; pg_version?: string } | undefined;
+    checks.db = { ok: true, error: undefined, ...(row ?? {}) };
   } catch (err) {
     checks.db = { ok: false, error: String(err) };
   }
 
-  // MinIO/S3
   try {
     const { HeadBucketCommand } = await import('@aws-sdk/client-s3');
     await s3.send(new HeadBucketCommand({ Bucket: BUCKET }));
@@ -65,7 +80,7 @@ app.get('/health', async (_req: Request, res: Response) => {
     env: NODE_ENV,
     uptime: Math.round(process.uptime()),
     service: 'kairos-servicos-api',
-    version: '0.1.0',
+    version: '0.2.0',
     checks: {
       db: { ok: checks.db.ok, ...(checks.db.error ? { error: checks.db.error } : {}) },
       storage: { ok: checks.storage.ok, ...(checks.storage.error ? { error: checks.storage.error } : {}) },
@@ -77,21 +92,26 @@ app.get('/health', async (_req: Request, res: Response) => {
 app.get('/', (_req: Request, res: Response) => {
   res.json({
     name: 'Kairós Serviços API',
-    version: '0.1.0',
+    version: '0.2.0',
     docs: '/health',
+    endpoints: {
+      auth: '/api/auth',
+      users: '/api/users',
+    },
   });
 });
+
+// ===== Rotas da API =====
+app.use('/api/auth', authRouter);
+app.use('/api/users', usersRouter);
 
 // ===== 404 =====
 app.use((req: Request, res: Response) => {
   res.status(404).json({ error: 'not_found', path: req.path });
 });
 
-// ===== Error handler global =====
-app.use((err: Error, _req: Request, res: Response, _next: express.NextFunction) => {
-  logger.error({ err }, 'erro não tratado');
-  res.status(500).json({ error: 'internal_error', message: err.message });
-});
+// ===== Error handler global (deve ser o último) =====
+app.use(errorHandler);
 
 // ===== Boot =====
 app.listen(PORT, () => {
