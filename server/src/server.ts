@@ -22,6 +22,8 @@ import usersRouter from './routes/users.ts';
 import citiesRouter from './routes/cities.ts';
 import categoriesRouter from './routes/categories.ts';
 import listingsRouter from './routes/listings.ts';
+import requestsRouter from './routes/requests.ts';
+import proposalsRouter from './routes/proposals.ts';
 
 const PORT = Number(process.env.PORT ?? 3051);
 const NODE_ENV = process.env.NODE_ENV ?? 'development';
@@ -83,7 +85,7 @@ app.get('/health', async (_req: Request, res: Response) => {
     env: NODE_ENV,
     uptime: Math.round(process.uptime()),
     service: 'kairos-servicos-api',
-    version: '0.3.0',
+    version: '0.4.0',
     checks: {
       db: { ok: checks.db.ok, ...(checks.db.error ? { error: checks.db.error } : {}) },
       storage: { ok: checks.storage.ok, ...(checks.storage.error ? { error: checks.storage.error } : {}) },
@@ -95,7 +97,7 @@ app.get('/health', async (_req: Request, res: Response) => {
 app.get('/', (_req: Request, res: Response) => {
   res.json({
     name: 'Kairós Serviços API',
-    version: '0.3.0',
+    version: '0.4.0',
     docs: '/health',
     endpoints: {
       auth: '/api/auth',
@@ -103,6 +105,8 @@ app.get('/', (_req: Request, res: Response) => {
       cities: '/api/cities',
       categories: '/api/categories',
       listings: '/api/listings',
+      requests: '/api/requests',
+      proposals: '/api/proposals',
     },
   });
 });
@@ -113,6 +117,8 @@ app.use('/api/users', usersRouter);
 app.use('/api/cities', citiesRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/listings', listingsRouter);
+app.use('/api/requests', requestsRouter);
+app.use('/api/proposals', proposalsRouter);
 
 // ===== 404 =====
 app.use((req: Request, res: Response) => {

@@ -99,3 +99,45 @@ export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 export type CreateListingInput = z.infer<typeof createListingSchema>;
 export type UpdateListingInput = z.infer<typeof updateListingSchema>;
 export type SearchListingsInput = z.infer<typeof searchListingsSchema>;
+
+// ===== Requests (pedidos) + Proposals (captações) =====
+
+export const requestStatusSchema = z.enum([
+  'aberto',
+  'recebido',
+  'em_negociacao',
+  'agendado',
+  'concluido',
+  'cancelado',
+]);
+
+export const urgenciaSchema = z.enum(['baixa', 'normal', 'alta', 'urgente']);
+
+export const horarioPrefSchema = z.enum(['manha', 'tarde', 'noite', 'qualquer']);
+
+export const createRequestSchema = z.object({
+  categoryId: z.string().uuid(),
+  servico: z.string().min(2).max(200),
+  descricao: z.string().min(2).max(2000),
+  cityId: z.string().uuid(),
+  neighborhoodId: z.string().uuid().optional(),
+  dataDesejada: z.iso.datetime().optional(), // ISO 8601
+  urgencia: urgenciaSchema.default('normal'),
+  horarioPreferencia: horarioPrefSchema.default('qualquer'),
+  clienteNome: z.string().min(2).max(200).optional(), // se não tiver user, anônimo
+  clienteWhatsapp: z.string().min(8).max(20),
+});
+
+export const updateRequestStatusSchema = z.object({
+  status: requestStatusSchema,
+});
+
+export const createProposalSchema = z.object({
+  requestId: z.string().uuid(),
+  valorEstimado: z.number().min(0).optional(),
+  prazoEstimado: z.string().min(2).max(120).optional(),
+  mensagem: z.string().max(1000).optional(),
+});
+
+export type CreateRequestInput = z.infer<typeof createRequestSchema>;
+export type CreateProposalInput = z.infer<typeof createProposalSchema>;
