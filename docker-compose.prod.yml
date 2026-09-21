@@ -20,6 +20,9 @@ services:
     container_name: kairos-servicos-minio
     restart: unless-stopped
     command: server /data --console-address ":9001"
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
     environment:
       MINIO_ROOT_USER: ${KAIROS_SERVICOS_MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${KAIROS_SERVICOS_MINIO_ROOT_PASSWORD}
