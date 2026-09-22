@@ -51,6 +51,7 @@ import { FavoritesView } from './components/FavoritesView.tsx';
 import { ProfessionalDashboardView } from './components/ProfessionalDashboardView.tsx';
 import { BusinessDashboardView } from './components/BusinessDashboardView.tsx';
 import { AdminDashboardView } from './components/AdminDashboardView.tsx';
+import { AdminBackendPanel } from './components/AdminBackendPanel.tsx';
 import { HowItWorksView } from './components/HowItWorksView.tsx';
 import { Footer } from './components/Footer.tsx';
 import { OfflineIndicator } from './components/OfflineIndicator.tsx';
@@ -984,18 +985,9 @@ export default function App() {
           />
         )}
 
-        {/* VIEW: ADMIN DASHBOARD */}
+        {/* VIEW: ADMIN DASHBOARD (consome API real) */}
         {currentTab === 'admin' && (
-          <AdminDashboardView
-            professionals={professionals}
-            businesses={businesses}
-            cities={cities}
-            categories={categories}
-            requests={requests}
-            auditLogs={auditLogs}
-            onRefresh={refreshAllState}
-            onResetData={handleResetData}
-          />
+          <AdminBackendPanel />
         )}
       </main>
 
